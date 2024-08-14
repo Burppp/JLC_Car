@@ -47,7 +47,14 @@ TIM_HandleTypeDef htim13;
 UART_HandleTypeDef huart7;
 
 /* USER CODE BEGIN PV */
-
+uint32_t HC_start = 0;
+uint32_t HC_end = 0;
+uint32_t HC_distance = 0;
+uint16_t HC_echo_status = 0;
+uint8_t HC_sendFinished = 0;
+uint8_t HC_recvFinished = 0;
+uint32_t HC_sendOnline = 0;
+uint8_t HC_rised = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -97,7 +104,9 @@ int main(void)
   MX_UART7_Init();
   MX_TIM13_Init();
   /* USER CODE BEGIN 2 */
-
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);//LED_L
+	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_SET);//LED_R
+	HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_SET);//BUZZER
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -107,9 +116,25 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_SET);
+		
+		//HC_SR04
+		if(HC_sendFinished == 0 || HAL_GetTick() - HC_sendOnline > 1000)
+		{
+			HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET);
+			HC_sendOnline = HAL_GetTick();
+			HC_sendFinished = 1;
+		}
+		HC_echo_status = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_10);
+		if(HC_echo_status == GPIO_PIN_SET)
+		{
+			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_RESET);
+		}
+		else
+		{
+			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);
+		}
+		HAL_Delay(1);
   }
   /* USER CODE END 3 */
 }
@@ -330,7 +355,7 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin : PE5 */
   GPIO_InitStruct.Pin = GPIO_PIN_5;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
@@ -364,8 +389,14 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PB10 PB13 PB15 PB5 */
-  GPIO_InitStruct.Pin = GPIO_PIN_10|GPIO_PIN_13|GPIO_PIN_15|GPIO_PIN_5;
+  /*Configure GPIO pin : PB10 */
+  GPIO_InitStruct.Pin = GPIO_PIN_10;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PB13 PB15 PB5 */
+  GPIO_InitStruct.Pin = GPIO_PIN_13|GPIO_PIN_15|GPIO_PIN_5;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
@@ -389,12 +420,34 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
+
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */
 }
 
 /* USER CODE BEGIN 4 */
 
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+	HC_echo_status = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_10);//debug
+	if(HC_echo_status == GPIO_PIN_SET)
+	{
+		HC_start = HAL_GetTick();
+		HC_rised = 1;
+	}
+	else if(HC_echo_status == GPIO_PIN_RESET && HC_rised == 1)
+	{
+		HC_end = HAL_GetTick();
+		uint32_t HC_duration = HC_end - HC_start;
+		HC_distance = HC_duration * 1000.f * 340 / 2;
+		HC_recvFinished = 1;
+		HC_sendFinished = 0;
+		HC_rised = 0;
+	}
+}
 /* USER CODE END 4 */
 
 /**
