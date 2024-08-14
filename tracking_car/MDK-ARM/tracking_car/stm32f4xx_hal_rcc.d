@@ -30,4 +30,6 @@ tracking_car\stm32f4xx_hal_rcc.o: C:/Users/Lumos/STM32Cube/Repository/STM32Cube_
 tracking_car\stm32f4xx_hal_rcc.o: C:/Users/Lumos/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.0/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h
 tracking_car\stm32f4xx_hal_rcc.o: C:/Users/Lumos/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.0/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h
 tracking_car\stm32f4xx_hal_rcc.o: C:/Users/Lumos/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.0/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
+tracking_car\stm32f4xx_hal_rcc.o: C:/Users/Lumos/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.0/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
+tracking_car\stm32f4xx_hal_rcc.o: C:/Users/Lumos/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.0/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
 tracking_car\stm32f4xx_hal_rcc.o: C:/Users/Lumos/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.0/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
