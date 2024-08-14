@@ -18,10 +18,11 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "cmsis_os.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "Chassis.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -42,19 +43,19 @@
 /* Private variables ---------------------------------------------------------*/
 ADC_HandleTypeDef hadc1;
 
+TIM_HandleTypeDef htim3;
 TIM_HandleTypeDef htim13;
 
 UART_HandleTypeDef huart7;
 
+osThreadId defaultTaskHandle;
+osThreadId ChassisTaskHandHandle;
+osThreadId LEDTaskHandleHandle;
+osThreadId ADCTaskHandleHandle;
+osThreadId SR04TaskHandleHandle;
+osThreadId WiFiTaskHandleHandle;
 /* USER CODE BEGIN PV */
-uint32_t HC_start = 0;
-uint32_t HC_end = 0;
-uint32_t HC_distance = 0;
-uint16_t HC_echo_status = 0;
-uint8_t HC_sendFinished = 0;
-uint8_t HC_recvFinished = 0;
-uint32_t HC_sendOnline = 0;
-uint8_t HC_rised = 0;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -63,6 +64,14 @@ static void MX_GPIO_Init(void);
 static void MX_ADC1_Init(void);
 static void MX_UART7_Init(void);
 static void MX_TIM13_Init(void);
+static void MX_TIM3_Init(void);
+void StartDefaultTask(void const * argument);
+void chassis_task(void const * argument);
+void led_task(void const * argument);
+void ADC_task(void const * argument);
+void SR04_task(void const * argument);
+void WiFi_task(void const * argument);
+
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -103,12 +112,60 @@ int main(void)
   MX_ADC1_Init();
   MX_UART7_Init();
   MX_TIM13_Init();
+  MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);//LED_L
-	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_SET);//LED_R
-	HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_SET);//BUZZER
+	Car_Init();
   /* USER CODE END 2 */
 
+  /* USER CODE BEGIN RTOS_MUTEX */
+  /* add mutexes, ... */
+  /* USER CODE END RTOS_MUTEX */
+
+  /* USER CODE BEGIN RTOS_SEMAPHORES */
+  /* add semaphores, ... */
+  /* USER CODE END RTOS_SEMAPHORES */
+
+  /* USER CODE BEGIN RTOS_TIMERS */
+  /* start timers, add new ones, ... */
+  /* USER CODE END RTOS_TIMERS */
+
+  /* USER CODE BEGIN RTOS_QUEUES */
+  /* add queues, ... */
+  /* USER CODE END RTOS_QUEUES */
+
+  /* Create the thread(s) */
+  /* definition and creation of defaultTask */
+  osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 128);
+  defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
+
+  /* definition and creation of ChassisTaskHand */
+  osThreadDef(ChassisTaskHand, chassis_task, osPriorityLow, 0, 128);
+  ChassisTaskHandHandle = osThreadCreate(osThread(ChassisTaskHand), NULL);
+
+  /* definition and creation of LEDTaskHandle */
+  osThreadDef(LEDTaskHandle, led_task, osPriorityNormal, 0, 128);
+  LEDTaskHandleHandle = osThreadCreate(osThread(LEDTaskHandle), NULL);
+
+  /* definition and creation of ADCTaskHandle */
+  osThreadDef(ADCTaskHandle, ADC_task, osPriorityNormal, 0, 128);
+  ADCTaskHandleHandle = osThreadCreate(osThread(ADCTaskHandle), NULL);
+
+  /* definition and creation of SR04TaskHandle */
+  osThreadDef(SR04TaskHandle, SR04_task, osPriorityLow, 0, 128);
+  SR04TaskHandleHandle = osThreadCreate(osThread(SR04TaskHandle), NULL);
+
+  /* definition and creation of WiFiTaskHandle */
+  osThreadDef(WiFiTaskHandle, WiFi_task, osPriorityHigh, 0, 128);
+  WiFiTaskHandleHandle = osThreadCreate(osThread(WiFiTaskHandle), NULL);
+
+  /* USER CODE BEGIN RTOS_THREADS */
+  /* add threads, ... */
+  /* USER CODE END RTOS_THREADS */
+
+  /* Start scheduler */
+  osKernelStart();
+
+  /* We should never get here as control is now taken by the scheduler */
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
@@ -116,24 +173,6 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-		
-		//HC_SR04
-		if(HC_sendFinished == 0 || HAL_GetTick() - HC_sendOnline > 1000)
-		{
-			HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_RESET);
-			HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET);
-			HC_sendOnline = HAL_GetTick();
-			HC_sendFinished = 1;
-		}
-		HC_echo_status = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_10);
-		if(HC_echo_status == GPIO_PIN_SET)
-		{
-			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_RESET);
-		}
-		else
-		{
-			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);
-		}
 		HAL_Delay(1);
   }
   /* USER CODE END 3 */
@@ -244,6 +283,51 @@ static void MX_ADC1_Init(void)
 }
 
 /**
+  * @brief TIM3 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM3_Init(void)
+{
+
+  /* USER CODE BEGIN TIM3_Init 0 */
+
+  /* USER CODE END TIM3_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM3_Init 1 */
+
+  /* USER CODE END TIM3_Init 1 */
+  htim3.Instance = TIM3;
+  htim3.Init.Prescaler = 45-1;
+  htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim3.Init.Period = 10-1;
+  htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim3, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim3, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM3_Init 2 */
+
+  /* USER CODE END TIM3_Init 2 */
+
+}
+
+/**
   * @brief TIM13 Initialization Function
   * @param None
   * @retval None
@@ -341,7 +425,8 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOC, GPIO_PIN_4, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1|GPIO_PIN_12|GPIO_PIN_3|GPIO_PIN_4, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_12|GPIO_PIN_3
+                          |GPIO_PIN_4, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_RESET);
@@ -382,8 +467,10 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PB1 PB12 PB3 PB4 */
-  GPIO_InitStruct.Pin = GPIO_PIN_1|GPIO_PIN_12|GPIO_PIN_3|GPIO_PIN_4;
+  /*Configure GPIO pins : PB0 PB1 PB12 PB3
+                           PB4 */
+  GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_12|GPIO_PIN_3
+                          |GPIO_PIN_4;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -421,7 +508,7 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /* EXTI interrupt init*/
-  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
+  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
@@ -430,25 +517,136 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+void Car_Init()
 {
-	HC_echo_status = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_10);//debug
-	if(HC_echo_status == GPIO_PIN_SET)
-	{
-		HC_start = HAL_GetTick();
-		HC_rised = 1;
-	}
-	else if(HC_echo_status == GPIO_PIN_RESET && HC_rised == 1)
-	{
-		HC_end = HAL_GetTick();
-		uint32_t HC_duration = HC_end - HC_start;
-		HC_distance = HC_duration * 1000.f * 340 / 2;
-		HC_recvFinished = 1;
-		HC_sendFinished = 0;
-		HC_rised = 0;
-	}
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);//LED_L
+	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_SET);//LED_R
+	HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_SET);//BUZZER
+	
+	//MOTOR
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_RESET);//LQ+
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_RESET);//LQ-
+	
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_RESET);//LH+
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, GPIO_PIN_RESET);//LH-
+	
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_RESET);//RH+
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_RESET);//RH-
+	
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, GPIO_PIN_RESET);//RQ+
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_RESET);//RQ-
 }
 /* USER CODE END 4 */
+
+/* USER CODE BEGIN Header_StartDefaultTask */
+/**
+  * @brief  Function implementing the defaultTask thread.
+  * @param  argument: Not used
+  * @retval None
+  */
+/* USER CODE END Header_StartDefaultTask */
+void StartDefaultTask(void const * argument)
+{
+  /* USER CODE BEGIN 5 */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END 5 */
+}
+
+/* USER CODE BEGIN Header_chassis_task */
+/**
+* @brief Function implementing the ChassisTaskHand thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_chassis_task */
+__weak void chassis_task(void const * argument)
+{
+  /* USER CODE BEGIN chassis_task */
+  /* Infinite loop */
+  for(;;)
+  {
+		
+    osDelay(1);
+  }
+  /* USER CODE END chassis_task */
+}
+
+/* USER CODE BEGIN Header_led_task */
+/**
+* @brief Function implementing the LEDTaskHandle thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_led_task */
+__weak void led_task(void const * argument)
+{
+  /* USER CODE BEGIN led_task */
+  /* Infinite loop */
+  for(;;)
+  {
+		
+    osDelay(1);
+  }
+  /* USER CODE END led_task */
+}
+
+/* USER CODE BEGIN Header_ADC_task */
+/**
+* @brief Function implementing the ADCTaskHandle thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_ADC_task */
+__weak void ADC_task(void const * argument)
+{
+  /* USER CODE BEGIN ADC_task */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END ADC_task */
+}
+
+/* USER CODE BEGIN Header_SR04_task */
+/**
+* @brief Function implementing the SR04TaskHandle thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_SR04_task */
+__weak void SR04_task(void const * argument)
+{
+  /* USER CODE BEGIN SR04_task */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END SR04_task */
+}
+
+/* USER CODE BEGIN Header_WiFi_task */
+/**
+* @brief Function implementing the WiFiTaskHandle thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_WiFi_task */
+__weak void WiFi_task(void const * argument)
+{
+  /* USER CODE BEGIN WiFi_task */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END WiFi_task */
+}
 
 /**
   * @brief  This function is executed in case of error occurrence.

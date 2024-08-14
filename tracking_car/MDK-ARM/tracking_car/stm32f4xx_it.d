@@ -35,3 +35,12 @@ tracking_car\stm32f4xx_it.o: C:/Users/Lumos/STM32Cube/Repository/STM32Cube_FW_F4
 tracking_car\stm32f4xx_it.o: C:/Users/Lumos/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.0/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
 tracking_car\stm32f4xx_it.o: C:/Users/Lumos/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.0/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 tracking_car\stm32f4xx_it.o: ../Core/Inc/stm32f4xx_it.h
+tracking_car\stm32f4xx_it.o: C:/Users/Lumos/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.0/Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
+tracking_car\stm32f4xx_it.o: ../Core/Inc/FreeRTOSConfig.h
+tracking_car\stm32f4xx_it.o: C:/Users/Lumos/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.0/Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
+tracking_car\stm32f4xx_it.o: C:/Users/Lumos/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.0/Middlewares/Third_Party/FreeRTOS/Source/include/portable.h
+tracking_car\stm32f4xx_it.o: C:/Users/Lumos/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.0/Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h
+tracking_car\stm32f4xx_it.o: C:/Users/Lumos/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.0/Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/portmacro.h
+tracking_car\stm32f4xx_it.o: C:/Users/Lumos/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.0/Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h
+tracking_car\stm32f4xx_it.o: C:/Users/Lumos/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.0/Middlewares/Third_Party/FreeRTOS/Source/include/task.h
+tracking_car\stm32f4xx_it.o: C:/Users/Lumos/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.0/Middlewares/Third_Party/FreeRTOS/Source/include/list.h

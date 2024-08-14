@@ -31,12 +31,16 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+void chassis_task(void const * argument);
+void led_task(void const * argument);
+void ADC_task(void const * argument);
+void SR04_task(void const * argument);
+void WiFi_task(void const * argument);
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
-
+extern void Car_Init(void);
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
