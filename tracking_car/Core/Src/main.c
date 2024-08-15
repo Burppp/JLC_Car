@@ -243,6 +243,7 @@ static void MX_ADC1_Init(void)
   /* USER CODE END ADC1_Init 0 */
 
   ADC_ChannelConfTypeDef sConfig = {0};
+  ADC_InjectionConfTypeDef sConfigInjected = {0};
 
   /* USER CODE BEGIN ADC1_Init 1 */
 
@@ -273,6 +274,22 @@ static void MX_ADC1_Init(void)
   sConfig.Rank = 1;
   sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configures for the selected ADC injected channel its corresponding rank in the sequencer and its sample time
+  */
+  sConfigInjected.InjectedChannel = ADC_CHANNEL_15;
+  sConfigInjected.InjectedRank = 1;
+  sConfigInjected.InjectedNbrOfConversion = 1;
+  sConfigInjected.InjectedSamplingTime = ADC_SAMPLETIME_3CYCLES;
+  sConfigInjected.ExternalTrigInjecConvEdge = ADC_EXTERNALTRIGINJECCONVEDGE_NONE;
+  sConfigInjected.ExternalTrigInjecConv = ADC_INJECTED_SOFTWARE_START;
+  sConfigInjected.AutoInjectedConv = DISABLE;
+  sConfigInjected.InjectedDiscontinuousConvMode = DISABLE;
+  sConfigInjected.InjectedOffset = 0;
+  if (HAL_ADCEx_InjectedConfigChannel(&hadc1, &sConfigInjected) != HAL_OK)
   {
     Error_Handler();
   }
