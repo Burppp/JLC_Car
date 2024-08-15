@@ -9,6 +9,8 @@
 uint8_t XJ_states[5] = {0};
 int result = 0;
 uint8_t chassis_relax = 1;
+extern TIM_HandleTypeDef htim2;
+extern TIM_HandleTypeDef htim3;
 
 void chassis_task(void const * argument)
 {
@@ -23,6 +25,16 @@ void chassis_task(void const * argument)
 		{
 			chassis_moveon();
 		}
+		
+		//__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_1, 5000);//RH-
+		//__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_2, 5000);//RH+
+		//__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_3, 5000);//RF-
+		//__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_4, 5000);//RF+
+		
+		//__HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_1, 5000);//LF-
+		//__HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_2, 5000);//LF+
+		//__HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_3, 5000);//LH+
+		//__HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_4, 10000);//LH-
 		
 		xTaskResumeAll();
 		
@@ -152,50 +164,74 @@ void chassis_turnLeft()
 
 void LQ_StepAhead()
 {
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_RESET);
+	__HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_2, 10000);
+	__HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_1, 0);
+	
+//	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_SET);
+//	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_RESET);
 }
 
 void LQ_StepBack()
 {
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_RESET);
+	__HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_2, 0);
+	__HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_1, 10000);
+	
+//	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_SET);
+//	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_RESET);
 }
 
 void LH_StepAhead()
 {
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, GPIO_PIN_RESET);
+	__HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_3, 10000);
+	__HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_4, 0);
+	
+//	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_SET);
+//	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, GPIO_PIN_RESET);
 }
 
 void LH_StepBack()
 {
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_RESET);
+	__HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_3, 0);
+	__HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_4, 10000);
+	
+//	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, GPIO_PIN_SET);
+//	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_RESET);
 }
 
 void RQ_StepAhead()
 {
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_RESET);
+	__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_4, 10000);
+	__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_3, 0);
+	
+//	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, GPIO_PIN_SET);
+//	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_RESET);
 }
 
 void RQ_StepBack()
 {
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, GPIO_PIN_RESET);
+	__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_4, 0);
+	__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_3, 10000);
+	
+//	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET);
+//	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, GPIO_PIN_RESET);
 }
 
 void RH_StepAhead()
 {
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_RESET);
+	__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_2, 10000);
+	__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_1, 0);
+	
+//	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_SET);
+//	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_RESET);
 }
 
 void RH_StepBack()
 {
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_RESET);
+	__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_2, 0);
+	__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_1, 10000);
+	
+//	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_SET);
+//	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_RESET);
 }
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
