@@ -151,7 +151,7 @@ int main(void)
   ADCTaskHandleHandle = osThreadCreate(osThread(ADCTaskHandle), NULL);
 
   /* definition and creation of SR04TaskHandle */
-  osThreadDef(SR04TaskHandle, SR04_task, osPriorityLow, 0, 256);
+  osThreadDef(SR04TaskHandle, SR04_task, osPriorityLow, 0, 128);
   SR04TaskHandleHandle = osThreadCreate(osThread(SR04TaskHandle), NULL);
 
   /* definition and creation of WiFiTaskHandle */
@@ -440,8 +440,8 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin : PE5 */
   GPIO_InitStruct.Pin = GPIO_PIN_5;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PF8 PF9 PF10 */
@@ -506,6 +506,10 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI9_5_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */

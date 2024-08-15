@@ -8,6 +8,7 @@
 
 uint8_t XJ_states[5] = {0};
 int result = 0;
+uint8_t chassis_relax = 1;
 
 void chassis_task(void const * argument)
 {
@@ -18,7 +19,10 @@ void chassis_task(void const * argument)
 		
 		tracking_update();
 		
-		chassis_moveon();
+		if(chassis_relax != 1)
+		{
+			chassis_moveon();
+		}
 		
 		xTaskResumeAll();
 		
@@ -170,4 +174,12 @@ void RH_StepBack()
 {
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_RESET);
+}
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+	if(GPIO_Pin == GPIO_PIN_5)
+	{
+		chassis_relax = 0;
+	}
 }
