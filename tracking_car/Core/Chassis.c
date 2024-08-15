@@ -26,7 +26,7 @@ void chassis_task(void const * argument)
 		
 		xTaskResumeAll();
 		
-    vTaskDelay(60);
+    vTaskDelay(1);
 	}
 }
 
@@ -46,21 +46,25 @@ void chassis_moveon()
 	switch(result)
 	{
 		case 3:
+			chassis_standStill_TurnLeft();
+			break;
 		case 2:
-			chassis_standStill_TurnRight();
+			chassis_standStill_TurnLeft();
 			break;
 		case 1:
-			chassis_turnRight();
+			chassis_turnLeft();
 			break;
 		case 0:
 			chassis_goStraight();
 			break;
 		case -1:
-			chassis_turnLeft();
+			chassis_turnRight();
 			break;
 		case -3:
+			chassis_standStill_TurnRight();
+			break;
 		case -2:
-			chassis_standStill_TurnLeft();
+			chassis_standStill_TurnRight();
 			break;
 		default:
 			chassis_standstill();
@@ -88,6 +92,7 @@ void chassis_standStill_TurnLeft()
 	RH_StepAhead();
 	
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_RESET);//LED_L
+	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_SET);//LED_R
 }
 
 void chassis_standStill_TurnRight()
@@ -98,6 +103,7 @@ void chassis_standStill_TurnRight()
 	RH_StepBack();
 	
 	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_RESET);//LED_R
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);//LED_L
 }
 
 void chassis_stepBack()
@@ -106,6 +112,9 @@ void chassis_stepBack()
 	LH_StepBack();
 	RQ_StepBack();
 	RH_StepBack();
+	
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);//LED_L
+	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_SET);//LED_R
 }
 
 void chassis_goStraight()
@@ -114,6 +123,9 @@ void chassis_goStraight()
 	LH_StepAhead();
 	RQ_StepAhead();
 	RH_StepAhead();
+	
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);//LED_L
+	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_SET);//LED_R
 }
 
 void chassis_turnRight()
@@ -124,6 +136,7 @@ void chassis_turnRight()
 	RH_StepAhead();
 	
 	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_RESET);//LED_R
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);//LED_L
 }
 
 void chassis_turnLeft()
@@ -134,6 +147,7 @@ void chassis_turnLeft()
 	RH_StepAhead();
 	
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_RESET);//LED_L
+	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_SET);//LED_R
 }
 
 void LQ_StepAhead()
@@ -191,10 +205,6 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 		if(chassis_relax)
 		{
 			chassis_relax = 0;
-		}
-		else if(chassis_relax == 0)
-		{
-			chassis_relax = 1;
 		}
 	}
 }

@@ -20,13 +20,17 @@ void SR04_task(void const * argument)
 		
 		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_RESET);
 		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET);
-		osDelay(1);
+		Delay_1us(15);
 		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_RESET);
 		while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_10) == GPIO_PIN_RESET);
 		time = 0;
-		while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_10) == GPIO_PIN_SET);
+		while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_10) == GPIO_PIN_SET)
+		{
+			time++;
+			Delay_1us(1);
+		}
 		time_end = time;
-		if(time_end / 100 < 38)
+		if(time_end < 3800)
 		{
 			distance = (time_end * 346) / 2000;
 		}
@@ -42,6 +46,16 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
   if (htim->Instance == TIM3)
   {
-    time++;
+    //time++;
   }
+}
+
+void Delay_1us(uint32_t us) 
+{
+    uint32_t i;
+
+    for(i = 0; i < us * 45; i++) 
+		{
+        __NOP();
+    }
 }
