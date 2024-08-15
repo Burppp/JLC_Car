@@ -18,31 +18,19 @@ void SR04_task(void const * argument)
 	{
 		//vTaskSuspendAll();
 		
-		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_RESET);
-		osDelay(1);
-		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET);
-		osDelay(1);
-		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_RESET);
-		osDelay(1);
-		while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_10) == GPIO_PIN_RESET)
-		{
-			if(time > 100000)
-			{
-				HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_RESET);
-				osDelay(1);
-				HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET);
-				osDelay(1);
-				HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_RESET);
-				osDelay(1);
-			}
-		}
-		time = 0;
-		while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_10) == GPIO_PIN_SET);
-		time_end = time;
-		if(time_end / 100 < 38)
-		{
-			distance = (time_end * 346) / 2000;
-		}
+//		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_RESET);
+//		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET);
+//		osDelay(1);
+//		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_RESET);
+//		while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_10) == GPIO_PIN_RESET);
+//		time = 0;
+//		while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_10) == GPIO_PIN_SET);
+//		time_end = time;
+//		if(time_end / 100 < 38)
+//		{
+//			distance = (time_end * 346) / 2000;
+//		}
+		
 		//距离过近时超声波不反馈上升沿
 		//xTaskResumeAll();
 		
