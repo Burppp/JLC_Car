@@ -3,7 +3,7 @@
 <title>Static Call Graph - [tracking_car\tracking_car.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image tracking_car\tracking_car.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Thu Aug 15 12:21:09 2024
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Thu Aug 15 12:39:48 2024
 <BR><P>
 <H3>Maximum Stack Usage =        344 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -792,12 +792,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Car_Init
 <LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_GPIO_Init
 <LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SR04_task
-<LI><a href="#[d8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnRight
-<LI><a href="#[d7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnLeft
 <LI><a href="#[da]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_standstill
-<LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_standStill_TurnRight
-<LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_standStill_TurnLeft
-<LI><a href="#[d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_goStraight
 <LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RQ_StepBack
 <LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RQ_StepAhead
 <LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RH_StepBack
@@ -974,8 +969,8 @@ Global Symbols
 <P><STRONG><a name="[b0]"></a>HAL_TIM_IRQHandler</STRONG> (Thumb, 304 bytes, Stack size 24 bytes, stm32f4xx_hal_tim.o(i.HAL_TIM_IRQHandler))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = HAL_TIM_IRQHandler
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_PeriodElapsedCallback
-<LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_TriggerCallback
+<BR>[Calls]<UL><LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_TriggerCallback
+<LI><a href="#[b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_PeriodElapsedCallback
 <LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_PWM_PulseFinishedCallback
 <LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_OC_DelayElapsedCallback
 <LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_IC_CaptureCallback
@@ -993,7 +988,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_IRQHandler
 </UL>
 
-<P><STRONG><a name="[b4]"></a>HAL_TIM_PeriodElapsedCallback</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, hc_sr04.o(i.HAL_TIM_PeriodElapsedCallback))
+<P><STRONG><a name="[b4]"></a>HAL_TIM_PeriodElapsedCallback</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, stm32f4xx_hal_tim.o(i.HAL_TIM_PeriodElapsedCallback))
 <BR><BR>[Called By]<UL><LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_IRQHandler
 </UL>
 
@@ -1201,14 +1196,13 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(.constdata)
 </UL>
-<P><STRONG><a name="[d4]"></a>chassis_goStraight</STRONG> (Thumb, 42 bytes, Stack size 8 bytes, chassis.o(i.chassis_goStraight))
+<P><STRONG><a name="[d4]"></a>chassis_goStraight</STRONG> (Thumb, 22 bytes, Stack size 8 bytes, chassis.o(i.chassis_goStraight))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = chassis_goStraight &rArr; RQ_StepAhead
 </UL>
 <BR>[Calls]<UL><LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RQ_StepAhead
 <LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RH_StepAhead
 <LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LQ_StepAhead
 <LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LH_StepAhead
-<LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 </UL>
 <BR>[Called By]<UL><LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_moveon
 </UL>
@@ -1226,26 +1220,24 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_task
 </UL>
 
-<P><STRONG><a name="[d6]"></a>chassis_standStill_TurnLeft</STRONG> (Thumb, 44 bytes, Stack size 8 bytes, chassis.o(i.chassis_standStill_TurnLeft))
+<P><STRONG><a name="[d6]"></a>chassis_standStill_TurnLeft</STRONG> (Thumb, 22 bytes, Stack size 8 bytes, chassis.o(i.chassis_standStill_TurnLeft))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = chassis_standStill_TurnLeft &rArr; RQ_StepAhead
 </UL>
 <BR>[Calls]<UL><LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RQ_StepAhead
 <LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RH_StepAhead
 <LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LQ_StepBack
 <LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LH_StepBack
-<LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 </UL>
 <BR>[Called By]<UL><LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_moveon
 </UL>
 
-<P><STRONG><a name="[d9]"></a>chassis_standStill_TurnRight</STRONG> (Thumb, 42 bytes, Stack size 8 bytes, chassis.o(i.chassis_standStill_TurnRight))
+<P><STRONG><a name="[d9]"></a>chassis_standStill_TurnRight</STRONG> (Thumb, 22 bytes, Stack size 8 bytes, chassis.o(i.chassis_standStill_TurnRight))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = chassis_standStill_TurnRight &rArr; RQ_StepBack
 </UL>
 <BR>[Calls]<UL><LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RQ_StepBack
 <LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RH_StepBack
 <LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LQ_StepAhead
 <LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LH_StepAhead
-<LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 </UL>
 <BR>[Called By]<UL><LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_moveon
 </UL>
@@ -1269,26 +1261,24 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(.constdata)
 </UL>
-<P><STRONG><a name="[d7]"></a>chassis_turnLeft</STRONG> (Thumb, 44 bytes, Stack size 8 bytes, chassis.o(i.chassis_turnLeft))
+<P><STRONG><a name="[d7]"></a>chassis_turnLeft</STRONG> (Thumb, 22 bytes, Stack size 8 bytes, chassis.o(i.chassis_turnLeft))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = chassis_turnLeft &rArr; RQ_StepAhead
 </UL>
 <BR>[Calls]<UL><LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RQ_StepAhead
 <LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RH_StepAhead
 <LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LQ_StepBack
 <LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LH_StepAhead
-<LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 </UL>
 <BR>[Called By]<UL><LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_moveon
 </UL>
 
-<P><STRONG><a name="[d8]"></a>chassis_turnRight</STRONG> (Thumb, 42 bytes, Stack size 8 bytes, chassis.o(i.chassis_turnRight))
+<P><STRONG><a name="[d8]"></a>chassis_turnRight</STRONG> (Thumb, 22 bytes, Stack size 8 bytes, chassis.o(i.chassis_turnRight))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = chassis_turnRight &rArr; RQ_StepBack
 </UL>
 <BR>[Calls]<UL><LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RQ_StepBack
 <LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RH_StepAhead
 <LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LQ_StepAhead
 <LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LH_StepAhead
-<LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 </UL>
 <BR>[Called By]<UL><LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_moveon
 </UL>

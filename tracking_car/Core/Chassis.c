@@ -91,8 +91,8 @@ void chassis_standStill_TurnLeft()
 	RQ_StepAhead();
 	RH_StepAhead();
 	
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_RESET);//LED_L
-	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_SET);//LED_R
+//	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_RESET);//LED_L
+//	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_SET);//LED_R
 }
 
 void chassis_standStill_TurnRight()
@@ -102,8 +102,8 @@ void chassis_standStill_TurnRight()
 	RQ_StepBack();
 	RH_StepBack();
 	
-	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_RESET);//LED_R
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);//LED_L
+//	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_RESET);//LED_R
+//	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);//LED_L
 }
 
 void chassis_stepBack()
@@ -113,8 +113,8 @@ void chassis_stepBack()
 	RQ_StepBack();
 	RH_StepBack();
 	
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);//LED_L
-	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_SET);//LED_R
+//	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);//LED_L
+//	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_SET);//LED_R
 }
 
 void chassis_goStraight()
@@ -124,8 +124,8 @@ void chassis_goStraight()
 	RQ_StepAhead();
 	RH_StepAhead();
 	
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);//LED_L
-	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_SET);//LED_R
+//	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);//LED_L
+//	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_SET);//LED_R
 }
 
 void chassis_turnRight()
@@ -135,8 +135,8 @@ void chassis_turnRight()
 	RQ_StepBack();
 	RH_StepAhead();
 	
-	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_RESET);//LED_R
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);//LED_L
+//	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_RESET);//LED_R
+//	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);//LED_L
 }
 
 void chassis_turnLeft()
@@ -146,8 +146,8 @@ void chassis_turnLeft()
 	RQ_StepAhead();
 	RH_StepAhead();
 	
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_RESET);//LED_L
-	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_SET);//LED_R
+//	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_RESET);//LED_L
+//	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_SET);//LED_R
 }
 
 void LQ_StepAhead()

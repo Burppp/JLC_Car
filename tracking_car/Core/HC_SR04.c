@@ -42,14 +42,6 @@ void SR04_task(void const * argument)
 	}
 }
 
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
-{
-  if (htim->Instance == TIM3)
-  {
-    //time++;
-  }
-}
-
 void Delay_1us(uint32_t us) 
 {
     uint32_t i;
