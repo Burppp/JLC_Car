@@ -8,6 +8,7 @@
 uint64_t time = 0;
 uint64_t time_end = 0;
 uint32_t distance = 0;
+uint8_t detected_obstacle = 0;
 extern TIM_HandleTypeDef htim3;
 
 void SR04_task(void const * argument)
@@ -20,19 +21,21 @@ void SR04_task(void const * argument)
 		
 		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_RESET);
 		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET);
-		delay_us(15);
+		Delay_1us(15);
 		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_RESET);
 		while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_10) == GPIO_PIN_RESET);
 		time = 0;
 		while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_10) == GPIO_PIN_SET)
 		{
 			time++;
-			delay_us(1);
+			Delay_1us(1);
 		}
 		time_end = time;
 		if(time_end < 3800)
 		{
 			distance = (time_end * 346) / 2000;
+			if(distance < 80)
+				detected_obstacle = 1;
 		}
 		
 		//距离过近时超声波不反馈上升沿

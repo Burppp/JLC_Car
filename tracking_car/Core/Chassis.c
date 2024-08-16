@@ -5,6 +5,19 @@
 #include "Chassis.h"
 #include "cmsis_os.h"
 #include "main.h"
+#include "Lora.h"
+
+chassis_t chassis = {
+	.chassis_track_relax = 1,
+	.chassis_pc_relax = 1,
+	.vx = 0,
+	.vy = 0,
+	.vy = 0,
+	.wheel_pwm[0] = 0,
+	.wheel_pwm[1] = 0,
+	.wheel_pwm[2] = 0,
+	.wheel_pwm[3] = 0
+};
 
 uint8_t XJ_states[5] = {0};
 int result = 0;
@@ -17,24 +30,156 @@ uint32_t result_index = 0;
 
 extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim3;
+extern UART_HandleTypeDef huart7;
+extern uint8_t bRxBufferUart1[1]; //接收数据
+extern int8_t wasdLR[7];
+extern uint8_t detected_obstacle;
+float deltaSpeed = 5;
 
 void chassis_task(void const * argument)
 {
   vTaskDelay(CHASSIS_TASK_INIT_TIME);
+	
+	//LoRa_T_V_Attach(1, 1);
+	
 	while(1)
 	{
 		//vTaskSuspendAll();
 		
+		HAL_UART_Receive_IT(&huart7, bRxBufferUart1, 1);
+		
 		tracking_update();
 		
-		if(chassis_relax != 1)
+		chassis_speed_update();
+		
+		if(chassis.chassis_track_relax != 1)
 		{
-			chassis_moveon();
+			if(detected_obstacle == 0)
+				chassis_moveon();
+			else
+			{
+				chassis_turnRight(3);
+				osDelay(1000);
+				chassis_goStraight();
+				osDelay(2500);
+				chassis_turnLeft(3);
+				osDelay(1000);
+				chassis_goStraight();
+				osDelay(2800);
+				chassis_turnLeft(3);
+				osDelay(1000);
+				chassis_goStraight();
+				osDelay(2500);
+				chassis_turnRight(3);
+				osDelay(1000);
+				detected_obstacle = 0;
+			}
 		}
+		//else if(chassis.chassis_pc_relax != 1)
+//		{
+//			chassis_moveon_pc();
+//		}
 		
 		//xTaskResumeAll();
 		
     vTaskDelay(1);
+	}
+}
+
+void chassis_speed_update()
+{
+	  if(wasdLR[0])
+        chassis.vx = 10000;
+    if(wasdLR[2])
+        chassis.vx = -10000;
+    if(!wasdLR[0] && !wasdLR[2])
+        chassis.vx = 0;
+
+    if(wasdLR[1] || wasdLR[3])
+        chassis.vw = (wasdLR[1] - wasdLR[3]) * 8000;
+    if(!wasdLR[1] && !wasdLR[3])
+        chassis.vw = 0;
+		
+		if(wasdLR[4])
+			chassis.chassis_pc_relax = 0;
+		else
+			chassis.chassis_pc_relax = 1;
+}
+
+void chassis_moveon_pc()
+{
+	chassis.wheel_pwm[LF] = chassis.vx;
+	chassis.wheel_pwm[LB] = chassis.vx;
+	chassis.wheel_pwm[RF] = chassis.vx;
+	chassis.wheel_pwm[RB] = chassis.vx;
+	if(chassis.vw > 0)
+	{
+		chassis.wheel_pwm[RF] = chassis.vw;
+		chassis.wheel_pwm[RB] = chassis.vw;
+		chassis.wheel_pwm[LF] = -chassis.vw;
+		chassis.wheel_pwm[LB] = -chassis.vw;
+	}
+	if(chassis.vw < 0)
+	{
+		chassis.wheel_pwm[RF] = chassis.vw;
+		chassis.wheel_pwm[RB] = chassis.vw;
+		chassis.wheel_pwm[LF] = -chassis.vw;
+		chassis.wheel_pwm[LB] = -chassis.vw;
+	}
+	for(int i = 0;i < 4;i++)
+	{
+		if(chassis.wheel_pwm[i] > 10000)
+			chassis.wheel_pwm[i] = 10000;
+		if(chassis.wheel_pwm[i] < -10000)
+			chassis.wheel_pwm[i] = -10000;
+	}
+	if(chassis.chassis_pc_relax == 1)
+	{
+		chassis.wheel_pwm[LF] = chassis.wheel_pwm[LB] = chassis.wheel_pwm[RF] = chassis.wheel_pwm[RB] = 0;
+	}
+	
+	if(chassis.wheel_pwm[LF] >= 0)
+	{
+		__HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_2, chassis.wheel_pwm[LF]);
+		__HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_1, 0);
+	}
+	if(chassis.wheel_pwm[LF] < 0)
+	{
+		__HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_2, 0);
+		__HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_1, -chassis.wheel_pwm[LF]);
+	}
+	
+	if(chassis.wheel_pwm[LB] >= 0)
+	{
+		__HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_3, chassis.wheel_pwm[LB]);
+		__HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_4, 0);
+	}
+	if(chassis.wheel_pwm[LB] < 0)
+	{
+		__HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_3, 0);
+		__HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_4, -chassis.wheel_pwm[LB]);
+	}
+	
+	if(chassis.wheel_pwm[RF] >= 0)
+	{
+		__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_4, 0);
+		__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_3, chassis.wheel_pwm[RF]);
+	}
+	if(chassis.wheel_pwm[RF] < 0)
+	{
+		__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_4, -chassis.wheel_pwm[RF]);
+		__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_3, 0);
+	}
+	
+	if(chassis.wheel_pwm[RB] >= 0)
+	{
+		__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_2, chassis.wheel_pwm[RB]);
+		__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_1, 0);
+	}
+	if(chassis.wheel_pwm[RB] < 0)
+	{
+		__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_2, 0);
+		__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_1, -chassis.wheel_pwm[RB]);
 	}
 }
 
@@ -262,9 +407,9 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
 	if(GPIO_Pin == GPIO_PIN_5)
 	{
-		if(chassis_relax)
+		if(chassis.chassis_track_relax)
 		{
-			chassis_relax = 0;
+			chassis.chassis_track_relax = 0;
 		}
 	}
 }

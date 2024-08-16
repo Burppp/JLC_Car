@@ -149,7 +149,7 @@ int main(void)
   defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
   /* definition and creation of ChassisTaskHand */
-  osThreadDef(ChassisTaskHand, chassis_task, osPriorityNormal, 0, 128);
+  osThreadDef(ChassisTaskHand, chassis_task, osPriorityLow, 0, 128);
   ChassisTaskHandHandle = osThreadCreate(osThread(ChassisTaskHand), NULL);
 
   /* definition and creation of LEDTaskHandle */

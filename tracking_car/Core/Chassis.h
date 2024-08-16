@@ -4,6 +4,26 @@
 
 #include "main.h"
 
+typedef struct
+{
+	float vx;
+	float vy;
+	float vw;
+	
+	int32_t wheel_pwm[4];
+	
+	uint8_t chassis_track_relax;
+	uint8_t chassis_pc_relax;
+}chassis_t;
+
+enum
+{
+	LF = 0,
+	LB = 1,
+	RB = 2,
+	RF = 3
+};
+
 #define CHASSIS_TASK_INIT_TIME 150
 void chassis_task(void const * argument);
 void tracking_update(void);
@@ -21,3 +41,5 @@ void chassis_stepBack(void);
 void chassis_standstill(void);
 void chassis_turnLeft(int level);
 void chassis_turnRight(int level);
+void chassis_speed_update(void);
+void chassis_moveon_pc(void);

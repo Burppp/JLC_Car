@@ -32,7 +32,9 @@
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
-
+extern volatile uint16_t LPUART1_RX_LEN;
+extern uint8_t bRxBufferUart1[1]; //接收数据
+extern uint8_t LPUART1_RX_BUF[1024];//缓存数据
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
@@ -54,6 +56,7 @@ void UsageFault_Handler(void);
 void DebugMon_Handler(void);
 void SysTick_Handler(void);
 void EXTI9_5_IRQHandler(void);
+void UART7_IRQHandler(void);
 /* USER CODE BEGIN EFP */
 
 /* USER CODE END EFP */

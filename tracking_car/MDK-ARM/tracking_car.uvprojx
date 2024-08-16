@@ -583,6 +583,16 @@
               <FileType>1</FileType>
               <FilePath>../Core/Src/stm32f4xx_hal_msp.c</FilePath>
             </File>
+            <File>
+              <FileName>Lora.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Lora.c</FilePath>
+            </File>
+            <File>
+              <FileName>Lora.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Core\Lora.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

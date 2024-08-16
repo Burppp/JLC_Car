@@ -9,6 +9,7 @@
 "tracking_car\freertos.o"
 "tracking_car\stm32f4xx_it.o"
 "tracking_car\stm32f4xx_hal_msp.o"
+"tracking_car\lora.o"
 "tracking_car\stm32f4xx_hal_adc.o"
 "tracking_car\stm32f4xx_hal_adc_ex.o"
 "tracking_car\stm32f4xx_ll_adc.o"

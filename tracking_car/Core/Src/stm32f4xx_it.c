@@ -57,7 +57,7 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
-
+extern UART_HandleTypeDef huart7;
 /* USER CODE BEGIN EV */
 
 /* USER CODE END EV */
@@ -197,6 +197,47 @@ void EXTI9_5_IRQHandler(void)
   /* USER CODE END EXTI9_5_IRQn 1 */
 }
 
-/* USER CODE BEGIN 1 */
+/**
+  * @brief This function handles UART7 global interrupt.
+  */
+void UART7_IRQHandler(void)
+{
+  /* USER CODE BEGIN UART7_IRQn 0 */
 
+  /* USER CODE END UART7_IRQn 0 */
+  HAL_UART_IRQHandler(&huart7);
+  /* USER CODE BEGIN UART7_IRQn 1 */
+
+  /* USER CODE END UART7_IRQn 1 */
+}
+
+/* USER CODE BEGIN 1 */
+int8_t wasdLR[7] = {0};
+uint8_t num = 0;
+uint8_t *sequence_num = NULL;
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+
+    if(huart->Instance == UART7)
+    {
+        LPUART1_RX_BUF[LPUART1_RX_LEN++]=bRxBufferUart1[0];
+
+        //HAL_UART_Transmit(&huart6, &bRxBufferUart1[0], 1, 100);
+        if(bRxBufferUart1[0] == 'j')
+        {
+            num = LPUART1_RX_BUF[LPUART1_RX_LEN - 9] - '0';
+            sequence_num = &num;
+            wasdLR[0] = LPUART1_RX_BUF[LPUART1_RX_LEN - 8] - '0';
+            wasdLR[1] = LPUART1_RX_BUF[LPUART1_RX_LEN - 7] - '0';
+            wasdLR[2] = LPUART1_RX_BUF[LPUART1_RX_LEN - 6] - '0';
+            wasdLR[3] = LPUART1_RX_BUF[LPUART1_RX_LEN - 5] - '0';
+            wasdLR[4] = LPUART1_RX_BUF[LPUART1_RX_LEN - 4] - '0';//space
+            wasdLR[5] = LPUART1_RX_BUF[LPUART1_RX_LEN - 3] - '0';
+            wasdLR[6] = LPUART1_RX_BUF[LPUART1_RX_LEN - 2] - '0';
+            if(sequence_num)
+                HAL_UART_Transmit(&huart7, (uint8_t *)sequence_num, 1, 100);
+        }
+        HAL_UART_Receive_IT(&huart7,bRxBufferUart1,1);
+    }
+}
 /* USER CODE END 1 */
