@@ -59,19 +59,19 @@ void chassis_task(void const * argument)
 			else
 			{
 				chassis_turnRight(3);
-				osDelay(1000);
+				osDelay(900);
 				chassis_goStraight();
-				osDelay(2500);
+				osDelay(2300);
 				chassis_turnLeft(3);
-				osDelay(1000);
+				osDelay(800);
 				chassis_goStraight();
-				osDelay(2800);
+				osDelay(1600);
 				chassis_turnLeft(3);
-				osDelay(1000);
+				osDelay(700);
 				chassis_goStraight();
-				osDelay(2500);
+				osDelay(2200);
 				chassis_turnRight(3);
-				osDelay(1000);
+				osDelay(800);
 				detected_obstacle = 0;
 			}
 		}
