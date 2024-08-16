@@ -9,6 +9,8 @@
 uint8_t XJ_states[5] = {0};
 int result = 0;
 uint8_t chassis_relax = 1;
+uint32_t current_speed = 10000;
+int goStraightSpeed = 80;
 extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim3;
 
@@ -17,7 +19,7 @@ void chassis_task(void const * argument)
   vTaskDelay(CHASSIS_TASK_INIT_TIME);
 	while(1)
 	{
-		vTaskSuspendAll();
+		//vTaskSuspendAll();
 		
 		tracking_update();
 		
@@ -26,17 +28,7 @@ void chassis_task(void const * argument)
 			chassis_moveon();
 		}
 		
-		//__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_1, 5000);//RH-
-		//__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_2, 5000);//RH+
-		//__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_3, 5000);//RF-
-		//__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_4, 5000);//RF+
-		
-		//__HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_1, 5000);//LF-
-		//__HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_2, 5000);//LF+
-		//__HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_3, 5000);//LH+
-		//__HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_4, 10000);//LH-
-		
-		xTaskResumeAll();
+		//xTaskResumeAll();
 		
     vTaskDelay(1);
 	}
@@ -58,25 +50,25 @@ void chassis_moveon()
 	switch(result)
 	{
 		case 3:
-			chassis_standStill_TurnLeft();
+			chassis_turnLeft(3);
 			break;
 		case 2:
-			chassis_standStill_TurnLeft();
+			chassis_turnLeft(2);
 			break;
 		case 1:
-			chassis_turnLeft();
+			chassis_turnLeft(1);
 			break;
 		case 0:
 			chassis_goStraight();
 			break;
 		case -1:
-			chassis_turnRight();
-			break;
-		case -3:
-			chassis_standStill_TurnRight();
+			chassis_turnRight(1);
 			break;
 		case -2:
-			chassis_standStill_TurnRight();
+			chassis_turnRight(2);
+			break;
+		case -3:
+			chassis_turnRight(3);
 			break;
 		default:
 			chassis_standstill();
@@ -96,142 +88,134 @@ void chassis_standstill()
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_RESET);
 }
 
-void chassis_standStill_TurnLeft()
+void chassis_turnLeft(int level)
 {
-	LQ_StepBack();
-	LH_StepBack();
-	RQ_StepAhead();
-	RH_StepAhead();
+	switch(level)
+	{
+		case 1:
+			LQ_StepAhead(40);
+			LH_StepAhead(40);
+			RQ_StepAhead(87);
+			RH_StepAhead(87);
+			break;
+		case 2:
+			LQ_StepBack(40);
+			LH_StepBack(40);
+			RQ_StepAhead(80);
+			RH_StepAhead(80);
+			break;
+		case 3:
+			LQ_StepBack(30);
+			LH_StepBack(30);
+			RQ_StepAhead(50);
+			RH_StepAhead(50);
+			break;
+		default:
+			break;
+	}
 	
-//	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_RESET);//LED_L
-//	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_SET);//LED_R
 }
 
-void chassis_standStill_TurnRight()
+void chassis_turnRight(int level)
 {
-	LQ_StepAhead();
-	LH_StepAhead();
-	RQ_StepBack();
-	RH_StepBack();
+	switch(level)
+	{
+		case 1:
+			LQ_StepAhead(87);
+			LH_StepAhead(87);
+			RQ_StepAhead(40);
+			RH_StepAhead(40);
+			break;
+		case 2:
+			LQ_StepAhead(80);
+			LH_StepAhead(80);
+			RQ_StepBack(40);
+			RH_StepBack(40);
+			break;
+		case 3:
+			LQ_StepAhead(50);
+			LH_StepAhead(50);
+			RQ_StepBack(30);
+			RH_StepBack(30);
+			break;
+		default:
+			break;
+	}
 	
-//	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_RESET);//LED_R
-//	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);//LED_L
 }
 
 void chassis_stepBack()
 {
-	LQ_StepBack();
-	LH_StepBack();
-	RQ_StepBack();
-	RH_StepBack();
+	LQ_StepBack(goStraightSpeed);
+	LH_StepBack(goStraightSpeed);
+	RQ_StepBack(goStraightSpeed);
+	RH_StepBack(goStraightSpeed);
 	
-//	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);//LED_L
-//	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_SET);//LED_R
 }
 
 void chassis_goStraight()
 {
-	LQ_StepAhead();
-	LH_StepAhead();
-	RQ_StepAhead();
-	RH_StepAhead();
+	LQ_StepAhead(goStraightSpeed);
+	LH_StepAhead(goStraightSpeed);
+	RQ_StepAhead(goStraightSpeed);
+	RH_StepAhead(goStraightSpeed);
 	
-//	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);//LED_L
-//	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_SET);//LED_R
 }
 
-void chassis_turnRight()
+void LQ_StepAhead(int speed)
 {
-	LQ_StepAhead();
-	LH_StepAhead();
-	RQ_StepBack();
-	RH_StepAhead();
-	
-//	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_RESET);//LED_R
-//	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);//LED_L
-}
-
-void chassis_turnLeft()
-{
-	LQ_StepBack();
-	LH_StepAhead();
-	RQ_StepAhead();
-	RH_StepAhead();
-	
-//	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_RESET);//LED_L
-//	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_SET);//LED_R
-}
-
-void LQ_StepAhead()
-{
-	__HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_2, 10000);
+	__HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_2, current_speed * speed / 100);
 	__HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_1, 0);
 	
-//	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_SET);
-//	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_RESET);
 }
 
-void LQ_StepBack()
+void LQ_StepBack(int speed)
 {
 	__HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_2, 0);
-	__HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_1, 10000);
+	__HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_1, current_speed * speed / 100);
 	
-//	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_SET);
-//	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_RESET);
 }
 
-void LH_StepAhead()
+void LH_StepAhead(int speed)
 {
-	__HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_3, 10000);
+	__HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_3, current_speed * speed / 100);
 	__HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_4, 0);
 	
-//	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_SET);
-//	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, GPIO_PIN_RESET);
 }
 
-void LH_StepBack()
+void LH_StepBack(int speed)
 {
 	__HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_3, 0);
-	__HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_4, 10000);
+	__HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_4, current_speed * speed / 100);
 	
-//	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, GPIO_PIN_SET);
-//	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_RESET);
 }
 
-void RQ_StepAhead()
+void RQ_StepAhead(int speed)
 {
-	__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_4, 10000);
+	__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_4, current_speed * speed / 100);
 	__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_3, 0);
 	
-//	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, GPIO_PIN_SET);
-//	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_RESET);
 }
 
-void RQ_StepBack()
+void RQ_StepBack(int speed)
 {
 	__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_4, 0);
-	__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_3, 10000);
+	__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_3, current_speed * speed / 100);
 	
-//	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET);
-//	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, GPIO_PIN_RESET);
 }
 
-void RH_StepAhead()
+void RH_StepAhead(int speed)
 {
-	__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_2, 10000);
+	__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_2, current_speed * speed / 100);
 	__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_1, 0);
 	
-//	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_SET);
-//	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_RESET);
 }
 
-void RH_StepBack()
+void RH_StepBack(int speed)
 {
 	__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_2, 0);
-	__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_1, 10000);
+	__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_1, current_speed * speed / 100);
 	
-//	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_SET);
-//	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_RESET);
 }
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)

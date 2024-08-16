@@ -8,3 +8,4 @@
 
 void SR04_task(void const * argument);
 void Delay_1us(uint32_t us);
+void delay_us(uint16_t nus);

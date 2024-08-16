@@ -40,9 +40,9 @@ void ADC_task(void const * argument)
 		if(powerLow == 1 && chassis_relax == 0)
 		{
 			osDelay(1000);
-			HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
+			//HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
 			osDelay(1000);
-			HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_SET);
+			//HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_SET);
 		}
 		
 		//xTaskResumeAll();

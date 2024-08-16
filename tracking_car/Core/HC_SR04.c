@@ -20,14 +20,14 @@ void SR04_task(void const * argument)
 		
 		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_RESET);
 		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET);
-		Delay_1us(15);
+		delay_us(15);
 		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_RESET);
 		while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_10) == GPIO_PIN_RESET);
 		time = 0;
 		while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_10) == GPIO_PIN_SET)
 		{
 			time++;
-			Delay_1us(1);
+			delay_us(1);
 		}
 		time_end = time;
 		if(time_end < 3800)
@@ -49,5 +49,38 @@ void Delay_1us(uint32_t us)
     for(i = 0; i < us * 45; i++) 
 		{
         __NOP();
+    }
+}
+
+static uint8_t fac_us = 0;
+void delay_us(uint16_t nus)
+{
+    uint32_t ticks = 0;
+    uint32_t told = 0;
+    uint32_t tnow = 0;
+    uint32_t tcnt = 0;
+    uint32_t reload = 0;
+    reload = SysTick->LOAD;
+    ticks = nus * fac_us;
+    told = SysTick->VAL;
+    while (1)
+    {
+        tnow = SysTick->VAL;
+        if (tnow != told)
+        {
+            if (tnow < told)
+            {
+                tcnt += told - tnow;
+            }
+            else
+            {
+                tcnt += reload - tnow + told;
+            }
+            told = tnow;
+            if (tcnt >= ticks)
+            {
+                break;
+            }
+        }
     }
 }
