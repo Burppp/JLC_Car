@@ -10,6 +10,9 @@ uint8_t XJ_states[5] = {0};
 int result = 0;
 uint8_t chassis_relax = 1;
 uint32_t current_speed = 10000;
+uint32_t level_3[2] = {0};
+uint32_t last_level_3[2] = {0};
+uint32_t last_tick[2] = {0};
 int goStraightSpeed = 80;
 extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim3;
@@ -45,8 +48,40 @@ void tracking_update(void)
 
 void chassis_moveon()
 {
+	while(XJ_states[0] == 0 && XJ_states[1] == 0 && XJ_states[2] == 0 && XJ_states[3] == 0 && XJ_states[4] == 0)
+	{
+		if(result >= 0)
+		{
+			LQ_StepAhead(100);
+			LH_StepAhead(100);
+			RQ_StepBack(100);
+			RQ_StepBack(100);
+		}
+		else if(result < 0)
+		{
+			LQ_StepBack(100);
+			LH_StepBack(100);
+			RQ_StepAhead(100);
+			RQ_StepAhead(100);
+		}
+		
+		tracking_update();
+		result = XJ_states[0] * 2 + XJ_states[1] - XJ_states[3] - XJ_states[4] * 2;
+	}
+	
 	result = XJ_states[0] * 2 + XJ_states[1] - XJ_states[3] - XJ_states[4] * 2;
 
+	if(last_tick[0] == 0)
+	{
+		last_tick[0] = HAL_GetTick();
+		last_level_3[0] = level_3[0];
+	}
+	if(last_tick[1] == 0)
+	{
+		last_tick[1] = HAL_GetTick();
+		last_level_3[1] = level_3[1];
+	}
+	
 	switch(result)
 	{
 		case 3:
@@ -105,10 +140,10 @@ void chassis_turnLeft(int level)
 			RH_StepAhead(80);
 			break;
 		case 3:
-			LQ_StepBack(30);
-			LH_StepBack(30);
-			RQ_StepAhead(50);
-			RH_StepAhead(50);
+			LQ_StepBack(10);
+			LH_StepBack(10);
+			RQ_StepAhead(40);
+			RH_StepAhead(40);
 			break;
 		default:
 			break;
@@ -133,10 +168,10 @@ void chassis_turnRight(int level)
 			RH_StepBack(40);
 			break;
 		case 3:
-			LQ_StepAhead(50);
-			LH_StepAhead(50);
-			RQ_StepBack(30);
-			RH_StepBack(30);
+			LQ_StepAhead(40);
+			LH_StepAhead(40);
+			RQ_StepBack(10);
+			RH_StepBack(10);
 			break;
 		default:
 			break;
@@ -192,15 +227,14 @@ void LH_StepBack(int speed)
 
 void RQ_StepAhead(int speed)
 {
-	__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_4, current_speed * speed / 100);
-	__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_3, 0);
-	
+	__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_4, 0);
+	__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_3, current_speed * speed / 100);
 }
 
 void RQ_StepBack(int speed)
 {
-	__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_4, 0);
-	__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_3, current_speed * speed / 100);
+	__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_4, current_speed * speed / 100);
+	__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_3, 0);
 	
 }
 
