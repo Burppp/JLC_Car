@@ -56,7 +56,10 @@ void chassis_task(void const * argument)
 		if(chassis.chassis_track_relax != 1)
 		{
 			if(detected_obstacle == 0)
+			{
 				chassis_moveon();
+				HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_SET);
+			}
 			else
 			{
 				chassis_turnRight(3);
@@ -73,6 +76,7 @@ void chassis_task(void const * argument)
 				osDelay(2200);
 				chassis_turnRight(3);
 				osDelay(800);
+				HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
 				detected_obstacle = 0;
 			}
 		}

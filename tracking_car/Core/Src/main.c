@@ -104,7 +104,7 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-
+	//SysTick_Config(SystemCoreClock);
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
@@ -159,8 +159,8 @@ int main(void)
   //ADCTaskHandleHandle = osThreadCreate(osThread(ADCTaskHandle), NULL);
 
   /* definition and creation of SR04TaskHandle */
-  //osThreadDef(SR04TaskHandle, SR04_task, osPriorityLow, 0, 128);
-  //SR04TaskHandleHandle = osThreadCreate(osThread(SR04TaskHandle), NULL);
+  osThreadDef(SR04TaskHandle, SR04_task, osPriorityLow, 0, 128);
+  SR04TaskHandleHandle = osThreadCreate(osThread(SR04TaskHandle), NULL);
 
   /* definition and creation of WiFiTaskHandle */
   osThreadDef(WiFiTaskHandle, WiFi_task, osPriorityHigh, 0, 128);
