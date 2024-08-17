@@ -25,8 +25,9 @@ uint8_t chassis_relax = 1;
 uint32_t current_speed = 10000;
 int goStraightSpeed = 80;
 
-int result_arr[500] = {0};
+int result_arr[50] = {-5};
 uint32_t result_index = 0;
+uint32_t last = 0;
 
 extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim3;
@@ -195,33 +196,29 @@ void tracking_update(void)
 int sum = 0;
 void chassis_moveon()
 {
+		
 	while(XJ_states[0] == 0 && XJ_states[1] == 0 && XJ_states[2] == 0 && XJ_states[3] == 0 && XJ_states[4] == 0)
 	{
-		for(int i = 0, sum = 0;i < 500; i++)
-		{
-			sum += result_arr[i];
-		}
-		
-		while(sum == 0)
-		{
-			tracking_update();
-			result = XJ_states[0] * 2 + XJ_states[1] - XJ_states[3] - XJ_states[4] * 2;
-			sum += result;
-		}
+//		while(sum == 0)
+//		{
+//			tracking_update();
+//			result = XJ_states[0] * 2 + XJ_states[1] - XJ_states[3] - XJ_states[4] * 2;
+//			sum += result;
+//		}
 		
 		if(sum > 0)
 		{
-			LQ_StepAhead(100);
-			LH_StepAhead(100);
-			RQ_StepBack(100);
-			RQ_StepBack(100);
+			LQ_StepBack(50);
+			LH_StepBack(50);
+			RQ_StepAhead(50);
+			RQ_StepAhead(50);
 		}
 		if(sum < 0)
 		{
-			LQ_StepBack(100);
-			LH_StepBack(100);
-			RQ_StepAhead(100);
-			RQ_StepAhead(100);
+			LQ_StepAhead(87);
+			LH_StepAhead(87);
+			RQ_StepBack(87);
+			RQ_StepBack(87);
 		}
 		
 		tracking_update();
@@ -229,9 +226,15 @@ void chassis_moveon()
 	}
 	
 	result = XJ_states[0] * 2 + XJ_states[1] - XJ_states[3] - XJ_states[4] * 2;
-	result_arr[result_index++] = result;
-	if(result_index > 500)
-		result_index = 0;
+	if(HAL_GetTick() - last > 100)
+	{
+		last = HAL_GetTick();
+		sum -= result_arr[result_index];
+		sum += result;
+		result_arr[result_index++] = result;
+		if(result_index >= 50)
+			result_index = 0;
+	}
 	
 	switch(result)
 	{

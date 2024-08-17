@@ -153,16 +153,14 @@ int main(void)
   ChassisTaskHandHandle = osThreadCreate(osThread(ChassisTaskHand), NULL);
 
   /* definition and creation of LEDTaskHandle */
-  osThreadDef(LEDTaskHandle, led_task, osPriorityNormal, 0, 128);
-  LEDTaskHandleHandle = osThreadCreate(osThread(LEDTaskHandle), NULL);
 
   /* definition and creation of ADCTaskHandle */
   //osThreadDef(ADCTaskHandle, ADC_task, osPriorityNormal, 0, 128);
   //ADCTaskHandleHandle = osThreadCreate(osThread(ADCTaskHandle), NULL);
 
   /* definition and creation of SR04TaskHandle */
-  osThreadDef(SR04TaskHandle, SR04_task, osPriorityLow, 0, 128);
-  SR04TaskHandleHandle = osThreadCreate(osThread(SR04TaskHandle), NULL);
+  //osThreadDef(SR04TaskHandle, SR04_task, osPriorityLow, 0, 128);
+  //SR04TaskHandleHandle = osThreadCreate(osThread(SR04TaskHandle), NULL);
 
   /* definition and creation of WiFiTaskHandle */
   osThreadDef(WiFiTaskHandle, WiFi_task, osPriorityHigh, 0, 128);

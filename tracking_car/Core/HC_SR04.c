@@ -17,18 +17,17 @@ void SR04_task(void const * argument)
 	HAL_TIM_Base_Start_IT(&htim3);
 	while(1)
 	{
-		//vTaskSuspendAll();
-		
 		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_RESET);
 		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET);
-		Delay_1us(15);
+		//delay_us(15);
+		Delay_us(15);
 		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_RESET);
 		while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_10) == GPIO_PIN_RESET);
 		time = 0;
 		while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_10) == GPIO_PIN_SET)
 		{
 			time++;
-			Delay_1us(1);
+			Delay_us(1);
 		}
 		time_end = time;
 		if(time_end < 3800)
@@ -37,53 +36,37 @@ void SR04_task(void const * argument)
 			if(distance < 80)
 				detected_obstacle = 1;
 		}
-		
-		//距离过近时超声波不反馈上升沿
-		//xTaskResumeAll();
-		
     vTaskDelay(1);
 	}
 }
 
 void Delay_1us(uint32_t us) 
 {
-    uint32_t i;
+		__IO uint32_t Delay = us * 180 / 7;
 
-    for(i = 0; i < us * 45; i++) 
+    do
 		{
         __NOP();
-    }
+    }while(Delay--);
 }
 
-static uint8_t fac_us = 0;
-void delay_us(uint16_t nus)
+void Delay_us(uint32_t us)
 {
-    uint32_t ticks = 0;
-    uint32_t told = 0;
-    uint32_t tnow = 0;
-    uint32_t tcnt = 0;
-    uint32_t reload = 0;
-    reload = SysTick->LOAD;
-    ticks = nus * fac_us;
-    told = SysTick->VAL;
-    while (1)
-    {
-        tnow = SysTick->VAL;
-        if (tnow != told)
-        {
-            if (tnow < told)
-            {
-                tcnt += told - tnow;
-            }
-            else
-            {
-                tcnt += reload - tnow + told;
-            }
-            told = tnow;
-            if (tcnt >= ticks)
-            {
-                break;
-            }
-        }
-    }
+	/*保存sysTick的状态*/
+	uint32_t val_temp=SysTick->VAL;
+	uint32_t load_temp=SysTick->LOAD;
+	uint16_t ctrl_temp=SysTick->CTRL;
+
+	/*SysTick状态重新设置，用于延时（系统暂停）*/
+	SysTick->LOAD = 9 * us;		// 设置定时器重装值,72MHz 8分频后9HMz，即一微秒记9个数
+	SysTick->VAL = 0x00;		// 清空当前计数值,清空后会自动装入重载值
+	SysTick->CTRL = 0x00000001; // 位2设置为0，8分频，启动定时器
+	while (!(SysTick->CTRL & 0x00010000));// 等待计数到0
+	
+	/*延时结束后恢复之前的状态，系统继续运行*/
+	SysTick->LOAD = load_temp;
+	SysTick->VAL = val_temp;
+	SysTick->CTRL = ctrl_temp;
+	//SysTick->CTRL = 0x00000000; // 关闭定时器
 }
+
