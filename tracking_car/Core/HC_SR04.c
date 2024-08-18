@@ -35,6 +35,8 @@ void SR04_task(void const * argument)
 			distance = (time_end * 346) / 2000;
 			if(distance < 80)
 				detected_obstacle = 1;
+			else
+				detected_obstacle = 0;
 		}
     vTaskDelay(1);
 	}
