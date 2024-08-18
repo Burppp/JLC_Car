@@ -8,6 +8,8 @@
 uint64_t time = 0;
 uint64_t time_end = 0;
 uint32_t distance = 0;
+uint32_t last_distance = 0;
+uint8_t is_closing = 0;
 uint8_t detected_obstacle = 0;
 extern TIM_HandleTypeDef htim3;
 
@@ -32,11 +34,24 @@ void SR04_task(void const * argument)
 		time_end = time;
 		if(time_end < 3800)
 		{
+			last_distance = distance;
 			distance = (time_end * 346) / 2000;
 			if(distance < 80)
-				detected_obstacle = 1;
+			{
+				if(distance > last_distance)
+				{
+					is_closing++;
+				}
+				if(is_closing >= 3)
+				{
+					detected_obstacle = 1;
+					is_closing = 0;
+				}
+			}
 			else
+			{
 				detected_obstacle = 0;
+			}
 		}
     vTaskDelay(1);
 	}

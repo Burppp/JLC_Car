@@ -4,9 +4,10 @@
 
 #include "ADC.h"
 #include "cmsis_os.h"
+#include "Chassis.h"
 
 extern ADC_HandleTypeDef hadc1;
-extern uint8_t chassis_relax;
+extern chassis_t chassis;
 
 uint8_t powerLow = 0;
 uint16_t ADCx = 0;
@@ -37,7 +38,7 @@ void ADC_task(void const * argument)
 			}
 		}
 		
-		if(powerLow == 1 && chassis_relax == 0)
+		if(powerLow == 1 && chassis.chassis_track_relax == 0)
 		{
 			osDelay(1000);
 			//HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);

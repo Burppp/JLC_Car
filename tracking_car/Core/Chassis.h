@@ -13,6 +13,7 @@ typedef struct
 	int32_t wheel_pwm[4];
 	
 	uint8_t chassis_track_relax;
+	uint8_t chassis_last_track_relax;
 	uint8_t chassis_pc_relax;
 }chassis_t;
 

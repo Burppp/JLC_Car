@@ -9,6 +9,7 @@
 
 chassis_t chassis = {
 	.chassis_track_relax = 1,
+	.chassis_last_track_relax = 1,
 	.chassis_pc_relax = 1,
 	.vx = 0,
 	.vy = 0,
@@ -21,11 +22,10 @@ chassis_t chassis = {
 
 uint8_t XJ_states[5] = {0};
 int result = 0;
-uint8_t chassis_relax = 1;
 uint32_t current_speed = 10000;
 int goStraightSpeed = 80;
 
-int result_arr[50] = {-5};
+int result_arr[50] = {0};
 uint32_t result_index = 0;
 uint32_t last = 0;
 
@@ -53,6 +53,11 @@ void chassis_task(void const * argument)
 		
 		chassis_speed_update();
 		
+		if(chassis.chassis_last_track_relax == 0 && chassis.chassis_track_relax == 1)
+			chassis.chassis_track_relax = 0;
+		
+		chassis.chassis_last_track_relax = chassis.chassis_track_relax;
+		
 		if(chassis.chassis_track_relax != 1)
 		{
 			if(detected_obstacle == 0)
@@ -62,6 +67,7 @@ void chassis_task(void const * argument)
 			}
 			else
 			{
+				HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
 				chassis_turnRight(3);
 				osDelay(900);
 				chassis_goStraight();
@@ -76,7 +82,6 @@ void chassis_task(void const * argument)
 				osDelay(2200);
 				chassis_turnRight(3);
 				osDelay(800);
-				HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
 				detected_obstacle = 0;
 			}
 		}
@@ -253,6 +258,7 @@ void chassis_moveon()
 			break;
 		case 0:
 			chassis_goStraight();
+			osDelay(10);
 			break;
 		case -1:
 			chassis_turnRight(1);
@@ -286,10 +292,10 @@ void chassis_turnLeft(int level)
 	switch(level)
 	{
 		case 1:
-			LQ_StepAhead(40);
-			LH_StepAhead(40);
-			RQ_StepAhead(87);
-			RH_StepAhead(87);
+			LQ_StepBack(40);
+			LH_StepBack(40);
+			RQ_StepAhead(100);
+			RH_StepAhead(100);
 			break;
 		case 2:
 			LQ_StepBack(40);
@@ -314,20 +320,20 @@ void chassis_turnRight(int level)
 	switch(level)
 	{
 		case 1:
-			LQ_StepAhead(87);
-			LH_StepAhead(87);
-			RQ_StepAhead(40);
-			RH_StepAhead(40);
+			LQ_StepAhead(100);
+			LH_StepAhead(100);
+			RQ_StepBack(50);
+			RH_StepBack(50);
 			break;
 		case 2:
-			LQ_StepAhead(80);
-			LH_StepAhead(80);
-			RQ_StepBack(40);
-			RH_StepBack(40);
+			LQ_StepAhead(100);
+			LH_StepAhead(100);
+			RQ_StepBack(35);
+			RH_StepBack(35);
 			break;
 		case 3:
-			LQ_StepAhead(87);
-			LH_StepAhead(87);
+			LQ_StepAhead(100);
+			LH_StepAhead(100);
 			RQ_StepBack(45);
 			RH_StepBack(45);
 			break;
