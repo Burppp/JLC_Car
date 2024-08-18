@@ -258,7 +258,7 @@ void chassis_moveon()
 			break;
 		case 0:
 			chassis_goStraight();
-			osDelay(10);
+			osDelay(1);
 			break;
 		case -1:
 			chassis_turnRight(1);
@@ -304,10 +304,10 @@ void chassis_turnLeft(int level)
 			RH_StepAhead(80);
 			break;
 		case 3:
-			LQ_StepBack(45);
-			LH_StepBack(45);
-			RQ_StepAhead(87);
-			RH_StepAhead(87);
+			LQ_StepBack(40);
+			LH_StepBack(40);
+			RQ_StepAhead(80);
+			RH_StepAhead(80);
 			break;
 		default:
 			break;
@@ -354,10 +354,10 @@ void chassis_stepBack()
 
 void chassis_goStraight()
 {
-	LQ_StepAhead(goStraightSpeed);
-	LH_StepAhead(goStraightSpeed);
-	RQ_StepAhead(goStraightSpeed);
-	RH_StepAhead(goStraightSpeed);
+	LQ_StepAhead(100);
+	LH_StepAhead(100);
+	RQ_StepAhead(100);
+	RH_StepAhead(100);
 	
 }
 
