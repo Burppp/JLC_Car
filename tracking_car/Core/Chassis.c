@@ -28,6 +28,7 @@ int goStraightSpeed = 80;
 int result_arr[50] = {0};
 uint32_t result_index = 0;
 uint32_t last = 0;
+uint8_t flag = 0;
 
 extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim3;
@@ -65,7 +66,7 @@ void chassis_task(void const * argument)
 				chassis_moveon();
 				HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_SET);
 			}
-			else
+			else if(detected_obstacle == 1 && flag == 0)
 			{
 				HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
 				chassis_turnRight(3);
@@ -82,7 +83,29 @@ void chassis_task(void const * argument)
 				osDelay(2200);
 				chassis_turnRight(3);
 				osDelay(800);
+				flag++;
 				detected_obstacle = 0;
+			}
+			else if(detected_obstacle == 1 && flag == 1)
+			{
+				HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
+				chassis_turnLeft(3);
+				osDelay(1400);
+				chassis_goStraight();
+				osDelay(1100);
+				chassis_turnRight(3);
+				osDelay(900);
+				chassis_goStraight();
+				osDelay(1500);
+				tracking_update();
+				while(XJ_states[0] == 0 && XJ_states[1] == 0 && XJ_states[2] == 0 && XJ_states[3] == 0 && XJ_states[4] == 0)
+				{
+					chassis_goStraight();
+					osDelay(100);
+					tracking_update();
+				}
+				detected_obstacle = 0;
+				flag = 0;
 			}
 		}
 		//else if(chassis.chassis_pc_relax != 1)

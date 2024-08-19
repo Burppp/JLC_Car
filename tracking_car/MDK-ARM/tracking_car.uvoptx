@@ -205,7 +205,7 @@
         <Ww>
           <count>2</count>
           <WinNumber>2</WinNumber>
-          <ItemText>result_arr,0x0A</ItemText>
+          <ItemText>last_detected_obstacle,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>3</count>
