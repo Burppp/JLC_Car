@@ -78,7 +78,7 @@ void chassis_task(void const * argument)
 				chassis_goStraight();
 				osDelay(1600);
 				chassis_turnLeft(3);
-				osDelay(700);
+				osDelay(800);
 				chassis_goStraight();
 				osDelay(2200);
 				chassis_turnRight(3);
@@ -101,6 +101,13 @@ void chassis_task(void const * argument)
 				while(XJ_states[0] == 0 && XJ_states[1] == 0 && XJ_states[2] == 0 && XJ_states[3] == 0 && XJ_states[4] == 0)
 				{
 					chassis_goStraight();
+					osDelay(100);
+					tracking_update();
+				}
+				tracking_update();
+				while(XJ_states[0] == 0 && XJ_states[1] == 0 && XJ_states[2] == 0 && XJ_states[3] == 0 && XJ_states[4] == 0)
+				{
+					chassis_turnRight(3);
 					osDelay(100);
 					tracking_update();
 				}
