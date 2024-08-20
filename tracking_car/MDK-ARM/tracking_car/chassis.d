@@ -49,4 +49,7 @@ tracking_car\chassis.o: C:/Users/Lumos/STM32Cube/Repository/STM32Cube_FW_F4_V1.2
 tracking_car\chassis.o: C:/Users/Lumos/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.0/Middlewares/Third_Party/FreeRTOS/Source/include/queue.h
 tracking_car\chassis.o: C:/Users/Lumos/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.0/Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h
 tracking_car\chassis.o: C:/Users/Lumos/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.0/Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h
+tracking_car\chassis.o: ..\Core\motor.h
 tracking_car\chassis.o: ..\Core\Lora.h
+tracking_car\chassis.o: ..\Core\tools.h
+tracking_car\chassis.o: ..\Core\PID.h

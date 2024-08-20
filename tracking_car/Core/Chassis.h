@@ -28,14 +28,6 @@ enum
 #define CHASSIS_TASK_INIT_TIME 150
 void chassis_task(void const * argument);
 void tracking_update(void);
-void LQ_StepAhead(int speed);
-void LQ_StepBack(int speed);
-void LH_StepAhead(int speed);
-void LH_StepBack(int speed);
-void RQ_StepAhead(int speed);
-void RQ_StepBack(int speed);
-void RH_StepAhead(int speed);
-void RH_StepBack(int speed);
 void chassis_moveon(void);
 void chassis_goStraight(void);
 void chassis_stepBack(void);
@@ -45,3 +37,6 @@ void chassis_turnRight(int level);
 void chassis_speed_update(void);
 void chassis_moveon_pc(void);
 int int_abs(int num);
+float float_abs(float num);
+void straightLine_obstacleAvoidence(void);
+void linearLine_obstacleAvoidence(void);
