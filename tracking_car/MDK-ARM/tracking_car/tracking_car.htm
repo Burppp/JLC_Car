@@ -3,7 +3,7 @@
 <title>Static Call Graph - [tracking_car\tracking_car.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image tracking_car\tracking_car.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Tue Aug 20 22:00:44 2024
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Tue Aug 20 22:06:08 2024
 <BR><P>
 <H3>Maximum Stack Usage =        288 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -1044,6 +1044,7 @@ Global Symbols
 </UL>
 <P><STRONG><a name="[dd]"></a>LH_StepAhead</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, motor.o(i.LH_StepAhead))
 <BR><BR>[Called By]<UL><LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnRight
+<LI><a href="#[e5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnLeft
 <LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_moveon
 <LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_goStraight
 </UL>
@@ -1055,6 +1056,7 @@ Global Symbols
 
 <P><STRONG><a name="[dc]"></a>LQ_StepAhead</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, motor.o(i.LQ_StepAhead))
 <BR><BR>[Called By]<UL><LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnRight
+<LI><a href="#[e5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnLeft
 <LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_moveon
 <LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_goStraight
 </UL>
@@ -1260,7 +1262,9 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[de]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RQ_StepAhead
 <LI><a href="#[df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RH_StepAhead
 <LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LQ_StepBack
+<LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LQ_StepAhead
 <LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LH_StepBack
+<LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LH_StepAhead
 </UL>
 <BR>[Called By]<UL><LI><a href="#[ea]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;straightLine_obstacleAvoidence
 <LI><a href="#[eb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;linearLine_obstacleAvoidence

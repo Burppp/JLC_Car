@@ -84,6 +84,8 @@ Section Cross References
     chassis.o(i.chassis_turnLeft) refers to motor.o(i.LH_StepBack) for LH_StepBack
     chassis.o(i.chassis_turnLeft) refers to motor.o(i.RQ_StepAhead) for RQ_StepAhead
     chassis.o(i.chassis_turnLeft) refers to motor.o(i.RH_StepAhead) for RH_StepAhead
+    chassis.o(i.chassis_turnLeft) refers to motor.o(i.LQ_StepAhead) for LQ_StepAhead
+    chassis.o(i.chassis_turnLeft) refers to motor.o(i.LH_StepAhead) for LH_StepAhead
     chassis.o(i.chassis_turnRight) refers to motor.o(i.LQ_StepAhead) for LQ_StepAhead
     chassis.o(i.chassis_turnRight) refers to motor.o(i.LH_StepAhead) for LH_StepAhead
     chassis.o(i.chassis_turnRight) refers to motor.o(i.RQ_StepBack) for RQ_StepBack

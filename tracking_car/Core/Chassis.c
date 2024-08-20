@@ -419,8 +419,8 @@ void chassis_turnLeft(int level)
 	switch(level)
 	{
 		case 1:
-			LQ_StepBack(40);
-			LH_StepBack(40);
+			LQ_StepAhead(20);
+			LH_StepAhead(20);
 			RQ_StepAhead(100);
 			RH_StepAhead(100);
 			break;
