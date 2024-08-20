@@ -10,6 +10,8 @@ uint64_t time_end = 0;
 uint32_t distance = 0;
 uint32_t last_distance = 0;
 uint8_t is_closing = 0;
+uint8_t is_turning = 0;
+uint8_t finished_turn = 0;
 uint8_t detected_obstacle = 0;
 extern TIM_HandleTypeDef htim3;
 
@@ -48,9 +50,22 @@ void SR04_task(void const * argument)
 					is_closing = 0;
 				}
 			}
+			else if(distance >= 100 && detected_obstacle)
+			{
+				if(distance < last_distance)
+				{
+					is_turning++;
+				}
+				if(is_turning >= 5)
+				{
+					finished_turn = 1;
+					is_turning = 0;
+				}
+				//osDelay(1);
+			}
 			else
 			{
-				detected_obstacle = 0;
+				//detected_obstacle = 0;
 			}
 		}
     vTaskDelay(1);

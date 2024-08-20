@@ -37,6 +37,7 @@ extern uint8_t bRxBufferUart1[1]; //接收数据
 extern int8_t wasdLR[7];
 extern uint8_t detected_obstacle;
 float deltaSpeed = 5;
+extern uint8_t finished_turn;
 
 void chassis_task(void const * argument)
 {
@@ -68,7 +69,7 @@ void chassis_task(void const * argument)
 			}
 			else if(detected_obstacle == 1 && flag == 0)
 			{
-				HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
+				//HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
 				chassis_turnRight(3);
 				osDelay(900);
 				chassis_goStraight();
@@ -78,36 +79,48 @@ void chassis_task(void const * argument)
 				chassis_goStraight();
 				osDelay(1600);
 				chassis_turnLeft(3);
-				osDelay(800);
+				osDelay(1000);
 				chassis_goStraight();
 				osDelay(2200);
 				chassis_turnRight(3);
-				osDelay(800);
+				osDelay(1000);
 				flag++;
 				detected_obstacle = 0;
+				finished_turn = 0;
 			}
 			else if(detected_obstacle == 1 && flag == 1)
 			{
-				HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
-				chassis_turnLeft(3);
-				osDelay(1400);
+				//HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
+				uint32_t start_turning;
+				start_turning = HAL_GetTick();
+				while(finished_turn == 0)
+				{
+					chassis_turnLeft(3);
+					osDelay(1);
+				}
+				uint32_t finished_turning;
+				finished_turning = HAL_GetTick();
+				if(finished_turning - start_turning < 1000)
+				{
+					HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
+					osDelay(300);
+				}
+				
 				chassis_goStraight();
-				osDelay(1100);
+				osDelay(1200);
 				chassis_turnRight(3);
-				osDelay(900);
+				osDelay(finished_turning - start_turning);
+				if(finished_turn - start_turning < 2000)
+				{
+					HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
+					osDelay(600);
+				}
 				chassis_goStraight();
-				osDelay(1500);
+				osDelay(600);
 				tracking_update();
 				while(XJ_states[0] == 0 && XJ_states[1] == 0 && XJ_states[2] == 0 && XJ_states[3] == 0 && XJ_states[4] == 0)
 				{
 					chassis_goStraight();
-					osDelay(100);
-					tracking_update();
-				}
-				tracking_update();
-				while(XJ_states[0] == 0 && XJ_states[1] == 0 && XJ_states[2] == 0 && XJ_states[3] == 0 && XJ_states[4] == 0)
-				{
-					chassis_turnRight(3);
 					osDelay(100);
 					tracking_update();
 				}
