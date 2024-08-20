@@ -44,3 +44,4 @@ void chassis_turnLeft(int level);
 void chassis_turnRight(int level);
 void chassis_speed_update(void);
 void chassis_moveon_pc(void);
+int int_abs(int num);

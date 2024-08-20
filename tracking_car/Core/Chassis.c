@@ -29,6 +29,7 @@ int result_arr[50] = {0};
 uint32_t result_index = 0;
 uint32_t last = 0;
 uint8_t flag = 0;
+int sum = 0;
 
 extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim3;
@@ -67,7 +68,7 @@ void chassis_task(void const * argument)
 				chassis_moveon();
 				HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_SET);
 			}
-			else if(detected_obstacle == 1 && flag == 0)
+			else if(detected_obstacle == 1 && int_abs(sum) < 10)
 			{
 				//HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
 				chassis_turnRight(3);
@@ -88,9 +89,9 @@ void chassis_task(void const * argument)
 				detected_obstacle = 0;
 				finished_turn = 0;
 			}
-			else if(detected_obstacle == 1 && flag == 1)
+			else if(detected_obstacle == 1)// && flag == 1
 			{
-				//HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
+				HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
 				uint32_t start_turning;
 				start_turning = HAL_GetTick();
 				while(finished_turn == 0)
@@ -102,7 +103,7 @@ void chassis_task(void const * argument)
 				finished_turning = HAL_GetTick();
 				if(finished_turning - start_turning < 1000)
 				{
-					HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
+					//HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
 					osDelay(300);
 				}
 				
@@ -112,7 +113,7 @@ void chassis_task(void const * argument)
 				osDelay(finished_turning - start_turning);
 				if(finished_turn - start_turning < 2000)
 				{
-					HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
+					//HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
 					osDelay(600);
 				}
 				chassis_goStraight();
@@ -128,7 +129,7 @@ void chassis_task(void const * argument)
 				flag = 0;
 			}
 		}
-		//else if(chassis.chassis_pc_relax != 1)
+//		else if(chassis.chassis_pc_relax != 1)
 //		{
 //			chassis_moveon_pc();
 //		}
@@ -137,6 +138,15 @@ void chassis_task(void const * argument)
 		
     vTaskDelay(1);
 	}
+}
+
+int int_abs(int num)
+{
+	if(num < 0)
+	{
+		return -1 * num;
+	}
+	return num;
 }
 
 void chassis_speed_update()
@@ -245,7 +255,6 @@ void tracking_update(void)
 	XJ_states[4] = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_15);
 }
 
-int sum = 0;
 void chassis_moveon()
 {
 		
