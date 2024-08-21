@@ -111,12 +111,8 @@ Section Cross References
     chassis.o(i.chassis_turnRight) refers to motor.o(i.RQ_StepAhead) for RQ_StepAhead
     chassis.o(i.chassis_turnRight) refers to motor.o(i.RH_StepAhead) for RH_StepAhead
     chassis.o(i.linearLine_obstacleAvoidence) refers to stm32f4xx_hal_gpio.o(i.HAL_GPIO_WritePin) for HAL_GPIO_WritePin
-    chassis.o(i.linearLine_obstacleAvoidence) refers to stm32f4xx_hal.o(i.HAL_GetTick) for HAL_GetTick
-    chassis.o(i.linearLine_obstacleAvoidence) refers to chassis.o(i.chassis_turnLeft) for chassis_turnLeft
-    chassis.o(i.linearLine_obstacleAvoidence) refers to cmsis_os.o(i.osDelay) for osDelay
-    chassis.o(i.linearLine_obstacleAvoidence) refers to chassis.o(i.chassis_goStraight) for chassis_goStraight
-    chassis.o(i.linearLine_obstacleAvoidence) refers to chassis.o(i.chassis_turnRight) for chassis_turnRight
-    chassis.o(i.linearLine_obstacleAvoidence) refers to chassis.o(i.tracking_update) for tracking_update
+    chassis.o(i.linearLine_obstacleAvoidence) refers to chassis.o(i.chassis_leftTurn_withTime) for chassis_leftTurn_withTime
+    chassis.o(i.linearLine_obstacleAvoidence) refers to chassis.o(i.chassis_rightTurn_withTime) for chassis_rightTurn_withTime
     chassis.o(i.linearLine_obstacleAvoidence) refers to chassis.o(.data) for .data
     chassis.o(i.linearLine_obstacleAvoidence) refers to hc_sr04.o(.data) for finished_turn
     chassis.o(i.straightLine_obstacleAvoidence) refers to stm32f4xx_hal_gpio.o(i.HAL_GPIO_WritePin) for HAL_GPIO_WritePin
@@ -1527,7 +1523,7 @@ Removing Unused input sections from the image.
     Removing chassis.o(i.chassis_moveon_pc), (272 bytes).
     Removing chassis.o(i.chassis_standstill), (100 bytes).
     Removing chassis.o(i.chassis_stepBack), (36 bytes).
-    Removing chassis.o(i.linearLine_obstacleAvoidence), (404 bytes).
+    Removing chassis.o(i.linearLine_obstacleAvoidence), (116 bytes).
     Removing chassis.o(.data), (4 bytes).
     Removing chassis.o(.data), (4 bytes).
     Removing hc_sr04.o(.rev16_text), (4 bytes).
@@ -2180,7 +2176,7 @@ Removing Unused input sections from the image.
     Removing port.o(i.vPortEndScheduler), (32 bytes).
     Removing port.o(i.vPortValidateInterruptPriority), (84 bytes).
 
-663 unused section(s) (total 48520 bytes) removed from the image.
+663 unused section(s) (total 48232 bytes) removed from the image.
 
 ==============================================================================
 

@@ -82,10 +82,6 @@ void chassis_task(void const * argument)
 				HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);
 				HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_SET);
 			}
-//			else if(detected_obstacle == 1 && int_abs(sum) < 5)
-//			{
-//				//straightLine_obstacleAvoidence();
-//			}
 			else if(detected_obstacle == 1)
 			{
 				if(duration < 2800)
@@ -188,80 +184,14 @@ void linearLine_obstacleAvoidence()
 		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_RESET);
 		HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_SET);
 		
-		uint32_t start_turning;
-		start_turning = HAL_GetTick();
-		while(finished_turn == 0)
-		{
-			chassis_turnLeft(3);
-			osDelay(1);
-		}
-		uint32_t finished_turning;
-		finished_turning = HAL_GetTick();
-		if(finished_turning - start_turning < 1000)
-		{
-			//HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
-			osDelay(300);
-		}
-		
-		chassis_goStraight();
-		osDelay(1200);
-		chassis_turnRight(3);
-		osDelay(finished_turning - start_turning);
-		if(finished_turning - start_turning < 2000)
-		{
-			//HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
-			osDelay(600);
-		}
-		chassis_goStraight();
-		osDelay(600);
-		tracking_update();
-		while(XJ_states[0] == 0 && XJ_states[1] == 0 && XJ_states[2] == 0 && XJ_states[3] == 0 && XJ_states[4] == 0)
-		{
-			chassis_goStraight();
-			osDelay(100);
-			tracking_update();
-		}
+		chassis_leftTurn_withTime();
 	}
 	else if(sum > 5)
 	{
 		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);
 		HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_RESET);
 		
-		uint32_t start_turning;
-		start_turning = HAL_GetTick();
-		while(finished_turn == 0)
-		{
-			chassis_turnRight(3);
-			osDelay(1);
-		}
-		uint32_t finished_turning;
-		finished_turning = HAL_GetTick();
-		if(finished_turning - start_turning < 1000)
-		{
-			//HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
-			osDelay(300);
-		}
-		
-		chassis_goStraight();
-		osDelay(1200);
-		chassis_turnLeft(3);
-		osDelay(finished_turning - start_turning);
-		if(finished_turning - start_turning < 2000)
-		{
-			//HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
-			osDelay(600);
-		}
-		chassis_goStraight();
-		osDelay(600);
-		tracking_update();
-		while(XJ_states[0] == 0 && XJ_states[1] == 0 && XJ_states[2] == 0 && XJ_states[3] == 0 && XJ_states[4] == 0)
-		{
-			chassis_goStraight();
-			osDelay(100);
-			tracking_update();
-		}
-		chassis_turnRight(3);
-		osDelay(500);
+		chassis_rightTurn_withTime();
 	}
 	finished_turn = 0;
 	detected_obstacle = 0;
