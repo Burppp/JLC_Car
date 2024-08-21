@@ -40,3 +40,5 @@ int int_abs(int num);
 float float_abs(float num);
 void straightLine_obstacleAvoidence(void);
 void linearLine_obstacleAvoidence(void);
+void chassis_leftTurn_withTime(void);
+void chassis_rightTurn_withTime(void);

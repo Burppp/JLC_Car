@@ -3,7 +3,7 @@
 <title>Static Call Graph - [tracking_car\tracking_car.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image tracking_car\tracking_car.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Wed Aug 21 12:24:48 2024
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Wed Aug 21 17:14:58 2024
 <BR><P>
 <H3>Maximum Stack Usage =        288 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -757,29 +757,30 @@ Global Symbols
 
 <P><STRONG><a name="[d1]"></a>HAL_GPIO_ReadPin</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, stm32f4xx_hal_gpio.o(i.HAL_GPIO_ReadPin))
 <BR><BR>[Called By]<UL><LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SR04_task
-<LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;tracking_update
+<LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;tracking_update
 </UL>
 
 <P><STRONG><a name="[8e]"></a>HAL_GPIO_WritePin</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, stm32f4xx_hal_gpio.o(i.HAL_GPIO_WritePin))
 <BR><BR>[Called By]<UL><LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Car_Init
 <LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_GPIO_Init
 <LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SR04_task
-<LI><a href="#[ea]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;straightLine_obstacleAvoidence
-<LI><a href="#[eb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;linearLine_obstacleAvoidence
+<LI><a href="#[eb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;straightLine_obstacleAvoidence
 <LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_task
+<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_leftTurn_withTime
 </UL>
 
 <P><STRONG><a name="[96]"></a>HAL_GetTick</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, stm32f4xx_hal.o(i.HAL_GetTick))
-<BR><BR>[Called By]<UL><LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit
-<LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCC_OscConfig
+<BR><BR>[Called By]<UL><LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCC_OscConfig
 <LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCC_ClockConfig
 <LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_PWREx_EnableOverDrive
 <LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
-<LI><a href="#[eb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;linearLine_obstacleAvoidence
 <LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_task
-<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_moveon
+<LI><a href="#[e8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_rightTurn_withTime
+<LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_moveon
+<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_leftTurn_withTime
 <LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_WaitOnFlagUntilTimeout
 <LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DMA_Abort
+<LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit
 </UL>
 
 <P><STRONG><a name="[d3]"></a>HAL_IncTick</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, stm32f4xx_hal.o(i.HAL_IncTick))
@@ -968,13 +969,13 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[bc]"></a>HAL_UARTEx_RxEventCallback</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, stm32f4xx_hal_uart.o(i.HAL_UARTEx_RxEventCallback))
-<BR><BR>[Called By]<UL><LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_IRQHandler
-<LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_Receive_IT
+<BR><BR>[Called By]<UL><LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_Receive_IT
+<LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_IRQHandler
 </UL>
 
 <P><STRONG><a name="[bb]"></a>HAL_UART_ErrorCallback</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, stm32f4xx_hal_uart.o(i.HAL_UART_ErrorCallback))
-<BR><BR>[Called By]<UL><LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_IRQHandler
-<LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_DMAAbortOnError
+<BR><BR>[Called By]<UL><LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_DMAAbortOnError
+<LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_IRQHandler
 </UL>
 
 <P><STRONG><a name="[b7]"></a>HAL_UART_IRQHandler</STRONG> (Thumb, 618 bytes, Stack size 24 bytes, stm32f4xx_hal_uart.o(i.HAL_UART_IRQHandler))
@@ -1021,8 +1022,8 @@ Global Symbols
 <P><STRONG><a name="[c4]"></a>HAL_UART_RxCpltCallback</STRONG> (Thumb, 162 bytes, Stack size 8 bytes, stm32f4xx_it.o(i.HAL_UART_RxCpltCallback))
 <BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = HAL_UART_RxCpltCallback &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
-<BR>[Calls]<UL><LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit
-<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Receive_IT
+<BR>[Calls]<UL><LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Receive_IT
+<LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit
 </UL>
 <BR>[Called By]<UL><LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_Receive_IT
 </UL>
@@ -1044,27 +1045,27 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f429xx.o(RESET)
 </UL>
 <P><STRONG><a name="[dd]"></a>LH_StepAhead</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, motor.o(i.LH_StepAhead))
-<BR><BR>[Called By]<UL><LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnRight
-<LI><a href="#[e5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnLeft
-<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_moveon
+<BR><BR>[Called By]<UL><LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnRight
+<LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnLeft
+<LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_moveon
 <LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_goStraight
 </UL>
 
-<P><STRONG><a name="[e2]"></a>LH_StepBack</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, motor.o(i.LH_StepBack))
-<BR><BR>[Called By]<UL><LI><a href="#[e5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnLeft
-<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_moveon
+<P><STRONG><a name="[e6]"></a>LH_StepBack</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, motor.o(i.LH_StepBack))
+<BR><BR>[Called By]<UL><LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnLeft
+<LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_moveon
 </UL>
 
 <P><STRONG><a name="[dc]"></a>LQ_StepAhead</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, motor.o(i.LQ_StepAhead))
-<BR><BR>[Called By]<UL><LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnRight
-<LI><a href="#[e5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnLeft
-<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_moveon
+<BR><BR>[Called By]<UL><LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnRight
+<LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnLeft
+<LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_moveon
 <LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_goStraight
 </UL>
 
-<P><STRONG><a name="[e1]"></a>LQ_StepBack</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, motor.o(i.LQ_StepBack))
-<BR><BR>[Called By]<UL><LI><a href="#[e5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnLeft
-<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_moveon
+<P><STRONG><a name="[e5]"></a>LQ_StepBack</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, motor.o(i.LQ_StepBack))
+<BR><BR>[Called By]<UL><LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnLeft
+<LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_moveon
 </UL>
 
 <P><STRONG><a name="[d]"></a>MemManage_Handler</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, stm32f4xx_it.o(i.MemManage_Handler))
@@ -1082,25 +1083,25 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f429xx.o(RESET)
 </UL>
 <P><STRONG><a name="[df]"></a>RH_StepAhead</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, motor.o(i.RH_StepAhead))
-<BR><BR>[Called By]<UL><LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnRight
-<LI><a href="#[e5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnLeft
+<BR><BR>[Called By]<UL><LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnRight
+<LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnLeft
 <LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_goStraight
 </UL>
 
 <P><STRONG><a name="[ec]"></a>RH_StepBack</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, motor.o(i.RH_StepBack))
-<BR><BR>[Called By]<UL><LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnRight
+<BR><BR>[Called By]<UL><LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnRight
 </UL>
 
 <P><STRONG><a name="[de]"></a>RQ_StepAhead</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, motor.o(i.RQ_StepAhead))
-<BR><BR>[Called By]<UL><LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnRight
-<LI><a href="#[e5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnLeft
-<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_moveon
+<BR><BR>[Called By]<UL><LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnRight
+<LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnLeft
+<LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_moveon
 <LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_goStraight
 </UL>
 
-<P><STRONG><a name="[e3]"></a>RQ_StepBack</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, motor.o(i.RQ_StepBack))
-<BR><BR>[Called By]<UL><LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnRight
-<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_moveon
+<P><STRONG><a name="[e7]"></a>RQ_StepBack</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, motor.o(i.RQ_StepBack))
+<BR><BR>[Called By]<UL><LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnRight
+<LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_moveon
 </UL>
 
 <P><STRONG><a name="[75]"></a>SR04_task</STRONG> (Thumb, 248 bytes, Stack size 0 bytes, hc_sr04.o(i.SR04_task))
@@ -1213,105 +1214,117 @@ Global Symbols
 <LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LQ_StepAhead
 <LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LH_StepAhead
 </UL>
-<BR>[Called By]<UL><LI><a href="#[ea]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;straightLine_obstacleAvoidence
-<LI><a href="#[eb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;linearLine_obstacleAvoidence
-<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_moveon
+<BR>[Called By]<UL><LI><a href="#[eb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;straightLine_obstacleAvoidence
+<LI><a href="#[e8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_rightTurn_withTime
+<LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_moveon
+<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_leftTurn_withTime
 </UL>
 
-<P><STRONG><a name="[e0]"></a>chassis_moveon</STRONG> (Thumb, 264 bytes, Stack size 16 bytes, chassis.o(i.chassis_moveon))
-<BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = chassis_moveon &rArr; osDelay &rArr; vTaskDelay &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
+<P><STRONG><a name="[e0]"></a>chassis_leftTurn_withTime</STRONG> (Thumb, 166 bytes, Stack size 16 bytes, chassis.o(i.chassis_leftTurn_withTime))
+<BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = chassis_leftTurn_withTime &rArr; osDelay &rArr; vTaskDelay &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
-<BR>[Calls]<UL><LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RQ_StepBack
-<LI><a href="#[de]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RQ_StepAhead
-<LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LQ_StepBack
-<LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LQ_StepAhead
-<LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LH_StepBack
-<LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LH_StepAhead
-<LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
-<LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;tracking_update
-<LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnRight
-<LI><a href="#[e5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnLeft
+<BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
+<LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
+<LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;tracking_update
+<LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnRight
+<LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnLeft
 <LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_goStraight
 <LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osDelay
 </UL>
 <BR>[Called By]<UL><LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_task
 </UL>
 
-<P><STRONG><a name="[e8]"></a>chassis_speed_update</STRONG> (Thumb, 104 bytes, Stack size 12 bytes, chassis.o(i.chassis_speed_update))
+<P><STRONG><a name="[e4]"></a>chassis_moveon</STRONG> (Thumb, 264 bytes, Stack size 16 bytes, chassis.o(i.chassis_moveon))
+<BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = chassis_moveon &rArr; osDelay &rArr; vTaskDelay &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
+</UL>
+<BR>[Calls]<UL><LI><a href="#[e7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RQ_StepBack
+<LI><a href="#[de]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RQ_StepAhead
+<LI><a href="#[e5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LQ_StepBack
+<LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LQ_StepAhead
+<LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LH_StepBack
+<LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LH_StepAhead
+<LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
+<LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;tracking_update
+<LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnRight
+<LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnLeft
+<LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_goStraight
+<LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osDelay
+</UL>
+<BR>[Called By]<UL><LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_task
+</UL>
+
+<P><STRONG><a name="[e8]"></a>chassis_rightTurn_withTime</STRONG> (Thumb, 162 bytes, Stack size 16 bytes, chassis.o(i.chassis_rightTurn_withTime))
+<BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = chassis_rightTurn_withTime &rArr; osDelay &rArr; vTaskDelay &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
+</UL>
+<BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
+<LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;tracking_update
+<LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnRight
+<LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnLeft
+<LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_goStraight
+<LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osDelay
+</UL>
+<BR>[Called By]<UL><LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_task
+</UL>
+
+<P><STRONG><a name="[ea]"></a>chassis_speed_update</STRONG> (Thumb, 104 bytes, Stack size 12 bytes, chassis.o(i.chassis_speed_update))
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = chassis_speed_update
 </UL>
 <BR>[Called By]<UL><LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_task
 </UL>
 
-<P><STRONG><a name="[74]"></a>chassis_task</STRONG> (Thumb, 190 bytes, Stack size 0 bytes, chassis.o(i.chassis_task))
-<BR><BR>[Stack]<UL><LI>Max Depth = 112<LI>Call Chain = chassis_task &rArr; linearLine_obstacleAvoidence &rArr; osDelay &rArr; vTaskDelay &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
+<P><STRONG><a name="[74]"></a>chassis_task</STRONG> (Thumb, 298 bytes, Stack size 0 bytes, chassis.o(i.chassis_task))
+<BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = chassis_task &rArr; straightLine_obstacleAvoidence &rArr; osDelay &rArr; vTaskDelay &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
-<BR>[Calls]<UL><LI><a href="#[e7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pid_init
-<LI><a href="#[e9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;int_abs
+<BR>[Calls]<UL><LI><a href="#[e9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pid_init
 <LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Receive_IT
 <LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
 <LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
-<LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;tracking_update
-<LI><a href="#[ea]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;straightLine_obstacleAvoidence
-<LI><a href="#[eb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;linearLine_obstacleAvoidence
-<LI><a href="#[e8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_speed_update
-<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_moveon
+<LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;tracking_update
+<LI><a href="#[eb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;straightLine_obstacleAvoidence
+<LI><a href="#[ea]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_speed_update
+<LI><a href="#[e8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_rightTurn_withTime
+<LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_moveon
+<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_leftTurn_withTime
 <LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(.constdata)
 </UL>
-<P><STRONG><a name="[e5]"></a>chassis_turnLeft</STRONG> (Thumb, 66 bytes, Stack size 8 bytes, chassis.o(i.chassis_turnLeft))
+<P><STRONG><a name="[e1]"></a>chassis_turnLeft</STRONG> (Thumb, 66 bytes, Stack size 8 bytes, chassis.o(i.chassis_turnLeft))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = chassis_turnLeft
 </UL>
 <BR>[Calls]<UL><LI><a href="#[de]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RQ_StepAhead
 <LI><a href="#[df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RH_StepAhead
-<LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LQ_StepBack
+<LI><a href="#[e5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LQ_StepBack
 <LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LQ_StepAhead
-<LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LH_StepBack
+<LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LH_StepBack
 <LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LH_StepAhead
 </UL>
-<BR>[Called By]<UL><LI><a href="#[ea]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;straightLine_obstacleAvoidence
-<LI><a href="#[eb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;linearLine_obstacleAvoidence
-<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_moveon
+<BR>[Called By]<UL><LI><a href="#[eb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;straightLine_obstacleAvoidence
+<LI><a href="#[e8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_rightTurn_withTime
+<LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_moveon
+<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_leftTurn_withTime
 </UL>
 
-<P><STRONG><a name="[e6]"></a>chassis_turnRight</STRONG> (Thumb, 94 bytes, Stack size 8 bytes, chassis.o(i.chassis_turnRight))
+<P><STRONG><a name="[e2]"></a>chassis_turnRight</STRONG> (Thumb, 94 bytes, Stack size 8 bytes, chassis.o(i.chassis_turnRight))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = chassis_turnRight
 </UL>
-<BR>[Calls]<UL><LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RQ_StepBack
+<BR>[Calls]<UL><LI><a href="#[e7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RQ_StepBack
 <LI><a href="#[de]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RQ_StepAhead
 <LI><a href="#[ec]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RH_StepBack
 <LI><a href="#[df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RH_StepAhead
 <LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LQ_StepAhead
 <LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LH_StepAhead
 </UL>
-<BR>[Called By]<UL><LI><a href="#[ea]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;straightLine_obstacleAvoidence
-<LI><a href="#[eb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;linearLine_obstacleAvoidence
-<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_moveon
+<BR>[Called By]<UL><LI><a href="#[eb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;straightLine_obstacleAvoidence
+<LI><a href="#[e8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_rightTurn_withTime
+<LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_moveon
+<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_leftTurn_withTime
 </UL>
 
 <P><STRONG><a name="[d0]"></a>delay_us</STRONG> (Thumb, 52 bytes, Stack size 16 bytes, hc_sr04.o(i.delay_us))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = delay_us
 </UL>
 <BR>[Called By]<UL><LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SR04_task
-</UL>
-
-<P><STRONG><a name="[e9]"></a>int_abs</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, tools.o(i.int_abs))
-<BR><BR>[Called By]<UL><LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_task
-</UL>
-
-<P><STRONG><a name="[eb]"></a>linearLine_obstacleAvoidence</STRONG> (Thumb, 380 bytes, Stack size 40 bytes, chassis.o(i.linearLine_obstacleAvoidence))
-<BR><BR>[Stack]<UL><LI>Max Depth = 112<LI>Call Chain = linearLine_obstacleAvoidence &rArr; osDelay &rArr; vTaskDelay &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
-</UL>
-<BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
-<LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
-<LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;tracking_update
-<LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnRight
-<LI><a href="#[e5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnLeft
-<LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_goStraight
-<LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osDelay
-</UL>
-<BR>[Called By]<UL><LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_task
 </UL>
 
 <P><STRONG><a name="[83]"></a>main</STRONG> (Thumb, 248 bytes, Stack size 112 bytes, main.o(i.main))
@@ -1340,9 +1353,10 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay
 </UL>
 <BR>[Called By]<UL><LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;StartDefaultTask
-<LI><a href="#[ea]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;straightLine_obstacleAvoidence
-<LI><a href="#[eb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;linearLine_obstacleAvoidence
-<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_moveon
+<LI><a href="#[eb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;straightLine_obstacleAvoidence
+<LI><a href="#[e8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_rightTurn_withTime
+<LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_moveon
+<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_leftTurn_withTime
 </UL>
 
 <P><STRONG><a name="[ef]"></a>osKernelStart</STRONG> (Thumb, 10 bytes, Stack size 8 bytes, cmsis_os.o(i.osKernelStart))
@@ -1363,7 +1377,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[e7]"></a>pid_init</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, pid.o(i.pid_init))
+<P><STRONG><a name="[e9]"></a>pid_init</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, pid.o(i.pid_init))
 <BR><BR>[Called By]<UL><LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_task
 </UL>
 
@@ -1384,28 +1398,29 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[fe]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;prvInitialiseNewTask
 </UL>
 
-<P><STRONG><a name="[ea]"></a>straightLine_obstacleAvoidence</STRONG> (Thumb, 194 bytes, Stack size 16 bytes, chassis.o(i.straightLine_obstacleAvoidence))
+<P><STRONG><a name="[eb]"></a>straightLine_obstacleAvoidence</STRONG> (Thumb, 194 bytes, Stack size 16 bytes, chassis.o(i.straightLine_obstacleAvoidence))
 <BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = straightLine_obstacleAvoidence &rArr; osDelay &rArr; vTaskDelay &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
-<LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;tracking_update
-<LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnRight
-<LI><a href="#[e5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnLeft
+<LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;tracking_update
+<LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnRight
+<LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_turnLeft
 <LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_goStraight
 <LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osDelay
 </UL>
 <BR>[Called By]<UL><LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_task
 </UL>
 
-<P><STRONG><a name="[e4]"></a>tracking_update</STRONG> (Thumb, 64 bytes, Stack size 16 bytes, chassis.o(i.tracking_update))
+<P><STRONG><a name="[e3]"></a>tracking_update</STRONG> (Thumb, 64 bytes, Stack size 16 bytes, chassis.o(i.tracking_update))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = tracking_update
 </UL>
 <BR>[Calls]<UL><LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_ReadPin
 </UL>
-<BR>[Called By]<UL><LI><a href="#[ea]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;straightLine_obstacleAvoidence
-<LI><a href="#[eb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;linearLine_obstacleAvoidence
+<BR>[Called By]<UL><LI><a href="#[eb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;straightLine_obstacleAvoidence
 <LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_task
-<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_moveon
+<LI><a href="#[e8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_rightTurn_withTime
+<LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_moveon
+<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_leftTurn_withTime
 </UL>
 
 <P><STRONG><a name="[f5]"></a>uxListRemove</STRONG> (Thumb, 38 bytes, Stack size 0 bytes, list.o(i.uxListRemove))
@@ -1551,8 +1566,8 @@ Global Symbols
 <LI><a href="#[f5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uxListRemove
 <LI><a href="#[10a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;prvResetNextTaskUnblockTime
 </UL>
-<BR>[Called By]<UL><LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xPortSysTickHandler
-<LI><a href="#[da]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xTaskResumeAll
+<BR>[Called By]<UL><LI><a href="#[da]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xTaskResumeAll
+<LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xPortSysTickHandler
 </UL>
 
 <P><STRONG><a name="[da]"></a>xTaskResumeAll</STRONG> (Thumb, 182 bytes, Stack size 32 bytes, tasks.o(i.xTaskResumeAll))
@@ -1688,9 +1703,9 @@ Local Symbols
 <P><STRONG><a name="[b9]"></a>UART_EndRxTransfer</STRONG> (Thumb, 78 bytes, Stack size 0 bytes, stm32f4xx_hal_uart.o(i.UART_EndRxTransfer))
 <BR><BR>[Calls]<UL><LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_EndRxTransfer
 </UL>
-<BR>[Called By]<UL><LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_IRQHandler
-<LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_WaitOnFlagUntilTimeout
+<BR>[Called By]<UL><LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_WaitOnFlagUntilTimeout
 <LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_EndRxTransfer
+<LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_IRQHandler
 </UL>
 
 <P><STRONG><a name="[b8]"></a>UART_Receive_IT</STRONG> (Thumb, 194 bytes, Stack size 8 bytes, stm32f4xx_hal_uart.o(i.UART_Receive_IT))
