@@ -36,6 +36,7 @@ int sum = 0;
 pid_t chassis_turn_pid;
 uint8_t pid_param[5] = {100, 30, 10, 0 ,0};
 float pid_output = 0;
+uint32_t now = 0;
 
 extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim3;
@@ -60,6 +61,8 @@ void chassis_task(void const * argument)
 		
 		HAL_UART_Receive_IT(&huart7, bRxBufferUart1, 1);
 		
+		now = HAL_GetTick();
+		
 		tracking_update();
 		
 		chassis_speed_update();
@@ -78,7 +81,7 @@ void chassis_task(void const * argument)
 				HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);
 				HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_SET);
 			}
-			else if(detected_obstacle == 1 && int_abs(sum) < 5)
+			else if(detected_obstacle == 1 && int_abs(sum) < 5 && flag == 0)
 			{
 				straightLine_obstacleAvoidence();
 			}
@@ -134,7 +137,7 @@ void straightLine_obstacleAvoidence()
 void linearLine_obstacleAvoidence()
 {
 	HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
-	if(sum <= -8)
+	if(sum < -5)
 	{
 		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_RESET);
 		HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_SET);
@@ -158,7 +161,7 @@ void linearLine_obstacleAvoidence()
 		osDelay(1200);
 		chassis_turnRight(3);
 		osDelay(finished_turning - start_turning);
-		if(finished_turn - start_turning < 2000)
+		if(finished_turning - start_turning < 2000)
 		{
 			//HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
 			osDelay(600);
@@ -173,7 +176,7 @@ void linearLine_obstacleAvoidence()
 			tracking_update();
 		}
 	}
-	else if(sum >= 8)
+	else if(sum > 5)
 	{
 		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);
 		HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_RESET);
@@ -197,7 +200,7 @@ void linearLine_obstacleAvoidence()
 		osDelay(1200);
 		chassis_turnLeft(3);
 		osDelay(finished_turning - start_turning);
-		if(finished_turn - start_turning < 2000)
+		if(finished_turning - start_turning < 2000)
 		{
 			//HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
 			osDelay(600);
@@ -214,6 +217,7 @@ void linearLine_obstacleAvoidence()
 		chassis_turnRight(3);
 		osDelay(500);
 	}
+	finished_turn = 0;
 	detected_obstacle = 0;
 	flag = 0;
 }
@@ -370,7 +374,6 @@ void chassis_moveon()
 //			pid_output = -100;
 //	}
 	
-	
 	switch(result)
 	{
 		case 3:
@@ -449,8 +452,8 @@ void chassis_turnRight(int level)
 		case 1:
 			LQ_StepAhead(100);
 			LH_StepAhead(100);
-			RQ_StepBack(50);
-			RH_StepBack(50);
+			RQ_StepAhead(20);
+			RH_StepAhead(20);
 			break;
 		case 2:
 			LQ_StepAhead(100);
