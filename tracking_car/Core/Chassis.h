@@ -4,6 +4,7 @@
 
 #include "main.h"
 #include "PID.h"
+#include "filter.h"
 
 #define CHASSIS_PERIOD 1
 
@@ -22,6 +23,8 @@ typedef struct
 	pid_t chassis_turn_pid;
 	float angle_feedforward;
 	float k_angle_feedforward;
+	
+	first_kalman_filter_t angle_kalman;
 }chassis_t;
 
 enum

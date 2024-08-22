@@ -623,6 +623,16 @@
               <FileType>5</FileType>
               <FilePath>..\Core\tools.h</FilePath>
             </File>
+            <File>
+              <FileName>filter.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\filter.c</FilePath>
+            </File>
+            <File>
+              <FileName>filter.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Core\filter.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1368,9 +1378,6 @@
               </FileOption>
             </File>
           </Files>
-        </Group>
-        <Group>
-          <GroupName>New Group</GroupName>
         </Group>
         <Group>
           <GroupName>::CMSIS</GroupName>

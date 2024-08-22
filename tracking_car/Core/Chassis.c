@@ -57,6 +57,7 @@ void chassis_task(void const * argument)
 	//LoRa_T_V_Attach(1, 1);
 	
 	pid_init(&chassis.chassis_turn_pid, pid_param[0], pid_param[1], pid_param[2], pid_param[3], pid_param[4]);
+	first_Kalman_Create(&chassis.angle_kalman, 1, 1);
 	
 	while(1)
 	{
@@ -337,12 +338,15 @@ void chassis_moveon()
 	{
 		last = HAL_GetTick();
 		sum -= result_arr[result_index];
-		sum += result;
-		result_arr[result_index++] = result;
+		//sum += result;
+		sum += chassis.angle_kalman.X_now;
+		//result_arr[result_index++] = result;
+		result_arr[result_index++] = chassis.angle_kalman.X_now;
 		if(result_index >= 30)
 			result_index = 0;
 	}
 	
+	//switch(result)
 	switch(result)
 	{
 		case 3:
@@ -372,6 +376,7 @@ void chassis_moveon()
 			break;
 	}
 	
+	first_Kalman_Filter(&chassis.angle_kalman, result);
 //	pid_output = pid_calc(&chassis.chassis_turn_pid, result, 0);
 //	chassis.wheel_pwm[LF] = 10000 + pid_output;
 //	chassis.wheel_pwm[LB] = 10000 + pid_output;
@@ -409,23 +414,24 @@ void chassis_leftTurn_withTime()
 	if(finished_turning - start_turning < 1000)
 	{
 		//HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
-		osDelay(300);
+		osDelay(400);
 	}
 	
 	chassis_goStraight();
-	osDelay(1200);
+	osDelay(1400);
 	chassis_turnRight(3);
 	osDelay(finished_turning - start_turning);
-	if(finished_turning - start_turning < 2000)
+	if(finished_turning - start_turning < 600)
 	{
 		HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
-		osDelay(100);
+		osDelay(500);
 	}
 	chassis_goStraight();
 	osDelay(500);
 	tracking_update();
 	while(XJ_states[0] == 0 && XJ_states[1] == 0 && XJ_states[2] == 0 && XJ_states[3] == 0 && XJ_states[4] == 0)
 	{
+		//HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
 		chassis_goStraight();
 		osDelay(100);
 		tracking_update();
@@ -446,7 +452,7 @@ void chassis_rightTurn_withTime()
 	if(finished_turning - start_turning < 1000)
 	{
 		//HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
-		osDelay(300);
+		osDelay(400);
 	}
 	
 	chassis_goStraight();
@@ -455,7 +461,7 @@ void chassis_rightTurn_withTime()
 	osDelay(finished_turning - start_turning);
 	if(finished_turning - start_turning < 2000)
 	{
-		HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
+		//HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
 		osDelay(100);
 	}
 	chassis_goStraight();

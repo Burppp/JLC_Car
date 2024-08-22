@@ -36,6 +36,7 @@ tracking_car\chassis.o: C:/Users/Lumos/STM32Cube/Repository/STM32Cube_FW_F4_V1.2
 tracking_car\chassis.o: C:/Users/Lumos/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.0/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
 tracking_car\chassis.o: C:/Users/Lumos/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.0/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 tracking_car\chassis.o: ..\Core\PID.h
+tracking_car\chassis.o: ..\Core\filter.h
 tracking_car\chassis.o: C:/Users/Lumos/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.0/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
 tracking_car\chassis.o: C:/Users/Lumos/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.0/Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
 tracking_car\chassis.o: ../Core/Inc/FreeRTOSConfig.h
