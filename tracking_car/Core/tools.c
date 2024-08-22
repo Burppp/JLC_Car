@@ -21,3 +21,16 @@ int int_abs(int num)
 	}
 	return num;
 }
+
+int32_t val_limit(int32_t val, int32_t max_output, int32_t min_output)
+{
+	if(max_output < val)
+	{
+		return max_output;
+	}
+	if(min_output > val)
+	{
+		return min_output;
+	}
+	return val;
+}

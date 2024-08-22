@@ -11,3 +11,7 @@ void RQ_StepAhead(int speed);
 void RQ_StepBack(int speed);
 void RH_StepAhead(int speed);
 void RH_StepBack(int speed);
+void RF_MotorRun(int32_t pwm);
+void RB_MotorRun(int32_t pwm);
+void LF_MotorRun(int32_t pwm);
+void LB_MotorRun(int32_t pwm);

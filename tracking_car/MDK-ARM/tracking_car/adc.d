@@ -50,3 +50,4 @@ tracking_car\adc.o: C:/Users/Lumos/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.0/
 tracking_car\adc.o: C:/Users/Lumos/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.0/Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h
 tracking_car\adc.o: C:/Users/Lumos/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.0/Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h
 tracking_car\adc.o: ..\Core\Chassis.h
+tracking_car\adc.o: ..\Core\PID.h

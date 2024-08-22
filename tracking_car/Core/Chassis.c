@@ -20,11 +20,14 @@ chassis_t chassis = {
 	.wheel_pwm[0] = 0,
 	.wheel_pwm[1] = 0,
 	.wheel_pwm[2] = 0,
-	.wheel_pwm[3] = 0
+	.wheel_pwm[3] = 0,
+	.angle_feedforward = 0,
+	.k_angle_feedforward = 1
 };
 
 uint8_t XJ_states[5] = {0};
 int result = 0;
+int last_result = 0;
 int goStraightSpeed = 80;
 
 int result_arr[30] = {0};
@@ -33,8 +36,8 @@ uint32_t last = 0;
 uint8_t flag = 0;
 int sum = 0;
 
-pid_t chassis_turn_pid;
-uint8_t pid_param[5] = {100, 30, 10, 0 ,0};
+//pid_t chassis_turn_pid;
+uint32_t pid_param[5] = {20000, 8000, 3000, 10 ,0};
 float pid_output = 0;
 uint32_t start = 0, now = 0, duration = 0;
 
@@ -53,7 +56,7 @@ void chassis_task(void const * argument)
 	
 	//LoRa_T_V_Attach(1, 1);
 	
-	pid_init(&chassis_turn_pid, pid_param[0], pid_param[1], pid_param[2], pid_param[3], pid_param[4]);
+	pid_init(&chassis.chassis_turn_pid, pid_param[0], pid_param[1], pid_param[2], pid_param[3], pid_param[4]);
 	
 	while(1)
 	{
@@ -105,7 +108,7 @@ void chassis_task(void const * argument)
 					
 					chassis_rightTurn_withTime();
 				}
-				else if(duration < 18000)
+				else if(duration < 19000)
 				{
 					HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_RESET);//L
 					HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_SET);//R
@@ -114,9 +117,6 @@ void chassis_task(void const * argument)
 				}
 				else if(duration < 22000)
 				{
-					HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);//L
-					HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_RESET);//R
-					
 					HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);//L
 					HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_RESET);//R
 					
@@ -327,9 +327,11 @@ void chassis_moveon()
 		}
 		
 		tracking_update();
+		last_result = result;
 		result = XJ_states[0] * 2 + XJ_states[1] - XJ_states[3] - XJ_states[4] * 2;
 	}
 	
+	last_result = result;
 	result = XJ_states[0] * 2 + XJ_states[1] - XJ_states[3] - XJ_states[4] * 2;
 	if(HAL_GetTick() - last > 100)
 	{
@@ -340,15 +342,6 @@ void chassis_moveon()
 		if(result_index >= 30)
 			result_index = 0;
 	}
-	
-//	pid_output = pid_calc(&chassis_turn_pid, result, 0);
-//	if(float_abs(pid_output) > 100)
-//	{
-//		if(pid_output > 0)
-//			pid_output = 100;
-//		else if(pid_output < 0)
-//			pid_output = -100;
-//	}
 	
 	switch(result)
 	{
@@ -378,6 +371,27 @@ void chassis_moveon()
 			//chassis_standstill();
 			break;
 	}
+	
+//	pid_output = pid_calc(&chassis.chassis_turn_pid, result, 0);
+//	chassis.wheel_pwm[LF] = 10000 + pid_output;
+//	chassis.wheel_pwm[LB] = 10000 + pid_output;
+//	chassis.wheel_pwm[RF] = -pid_output + 10000;
+//	chassis.wheel_pwm[RB] = -pid_output + 10000;
+//	
+//	if(result != last_result)
+//	{
+//		chassis.angle_feedforward = (result - last_result) / (CHASSIS_PERIOD * 0.001) * chassis.k_angle_feedforward;
+//	}
+//	
+//	chassis.wheel_pwm[LF] = val_limit(chassis.wheel_pwm[LF], 10000, -10000);
+//	chassis.wheel_pwm[LB] = val_limit(chassis.wheel_pwm[LB], 10000, -10000);
+//	chassis.wheel_pwm[RF] = val_limit(chassis.wheel_pwm[RF], 10000, -10000);
+//	chassis.wheel_pwm[RB] = val_limit(chassis.wheel_pwm[RB], 10000, -10000);
+//	
+//	RF_MotorRun(chassis.wheel_pwm[RF]);
+//	RB_MotorRun(chassis.wheel_pwm[RB]);
+//	LF_MotorRun(chassis.wheel_pwm[LF]);
+//	LB_MotorRun(chassis.wheel_pwm[LB]);
 }
 
 /*																																				CHASSIS MOVE BSP																																	*/
@@ -405,10 +419,10 @@ void chassis_leftTurn_withTime()
 	if(finished_turning - start_turning < 2000)
 	{
 		HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
-		osDelay(300);
+		osDelay(100);
 	}
 	chassis_goStraight();
-	osDelay(600);
+	osDelay(500);
 	tracking_update();
 	while(XJ_states[0] == 0 && XJ_states[1] == 0 && XJ_states[2] == 0 && XJ_states[3] == 0 && XJ_states[4] == 0)
 	{
@@ -441,8 +455,8 @@ void chassis_rightTurn_withTime()
 	osDelay(finished_turning - start_turning);
 	if(finished_turning - start_turning < 2000)
 	{
-		//HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
-		osDelay(300);
+		HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
+		osDelay(100);
 	}
 	chassis_goStraight();
 	osDelay(600);
@@ -474,8 +488,8 @@ void chassis_turnLeft(int level)
 	switch(level)
 	{
 		case 1:
-			LQ_StepAhead(20);
-			LH_StepAhead(20);
+			LQ_StepAhead(10);
+			LH_StepAhead(10);
 			RQ_StepAhead(100);
 			RH_StepAhead(100);
 			break;
@@ -503,8 +517,8 @@ void chassis_turnRight(int level)
 		case 1:
 			LQ_StepAhead(100);
 			LH_StepAhead(100);
-			RQ_StepAhead(20);
-			RH_StepAhead(20);
+			RQ_StepBack(20);
+			RH_StepBack(20);
 			break;
 		case 2:
 			LQ_StepAhead(100);

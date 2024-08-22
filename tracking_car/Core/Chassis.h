@@ -3,6 +3,9 @@
 //
 
 #include "main.h"
+#include "PID.h"
+
+#define CHASSIS_PERIOD 1
 
 typedef struct
 {
@@ -15,6 +18,10 @@ typedef struct
 	uint8_t chassis_track_relax;
 	uint8_t chassis_last_track_relax;
 	uint8_t chassis_pc_relax;
+	
+	pid_t chassis_turn_pid;
+	float angle_feedforward;
+	float k_angle_feedforward;
 }chassis_t;
 
 enum
