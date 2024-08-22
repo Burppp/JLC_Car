@@ -195,12 +195,12 @@
         <Ww>
           <count>0</count>
           <WinNumber>2</WinNumber>
-          <ItemText>chassis.angle_kalman.X_now</ItemText>
+          <ItemText>start,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>1</count>
           <WinNumber>2</WinNumber>
-          <ItemText>chassis.angle_feedforward</ItemText>
+          <ItemText>now,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>2</count>
