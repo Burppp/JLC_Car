@@ -47,14 +47,14 @@ void RQ_StepBack(int speed)
 
 void RH_StepAhead(int speed)
 {
-	__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_2, current_speed * speed / 100);
-	__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_1, 0);
+	__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_2, 0);
+	__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_1, current_speed * speed / 100);
 }
 
 void RH_StepBack(int speed)
 {
-	__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_2, 0);
-	__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_1, current_speed * speed / 100);
+	__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_2, current_speed * speed / 100);
+	__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_1, 0);
 }
 
 void RF_MotorRun(int32_t pwm)
