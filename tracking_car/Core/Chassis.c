@@ -11,7 +11,7 @@
 #include "PID.h"
 
 chassis_t chassis = {
-	.chassis_track_relax = 1,
+	.chassis_track_relax = 0,
 	.chassis_last_track_relax = 1,
 	.chassis_pc_relax = 1,
 	.vx = 0,
@@ -70,105 +70,36 @@ void chassis_task(void const * argument)
 				
 		chassis.chassis_last_track_relax = chassis.chassis_track_relax;
 		
-		if(chassis.chassis_track_relax != 1)
+		if(chassis.chassis_pc_relax != 1)
 		{
-			if(start == 0)
-				start = HAL_GetTick();
-			
-			now = HAL_GetTick();
-			duration = now - start;
-			
-			if(detected_obstacle == 0)
-			{
-				chassis_moveon();
-				HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_SET);
-				HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);
-				HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_SET);
-			}
-			else if(detected_obstacle == 1)
-			{
-				if(duration < 4300)//2800
-				{
-					HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);//L
-					HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_RESET);//R
-			
-					chassis_rightTurn_withTime();
-					chassis_turnRight(3);
-					osDelay(200);
-					
-					tracking_update();
-	
-					while(XJ_states[0] == 0 && XJ_states[1] == 0 && XJ_states[2] == 0 && XJ_states[3] == 0 && XJ_states[4] == 0)
-					{
-						HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
-						osDelay(100);
-						tracking_update();
-					}
-				}
-				else if(duration < 9100)//9000
-				{
-					HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_RESET);//L
-					HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_SET);//R
-					
-					chassis_leftTurn_withTime();
-				}
-				else if(duration < 13700)//12000
-				{
-					HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);//L
-					HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_RESET);//R
-					
-					chassis_rightTurn_withTime();
-					chassis_turnRight(3);
-					osDelay(200);
-					
-					tracking_update();
-	
-					while(XJ_states[0] == 0 && XJ_states[1] == 0 && XJ_states[2] == 0 && XJ_states[3] == 0 && XJ_states[4] == 0)
-					{
-						HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
-						osDelay(100);
-						tracking_update();
-					}
-				}
-				else if(duration < 16800)//17000
-				{
-					HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_RESET);//L
-					HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_SET);//R
-					
-					chassis_leftTurn_withTime();
-					chassis_turnLeft(3);
-					osDelay(200);
-				}
-				else if(duration < 25865)//22000
-				{
-					HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);//L
-					HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_RESET);//R
-					
-					chassis_rightTurn_withTime();
-					chassis_turnRight(3);
-					osDelay(800);
-					
-					tracking_update();
-	
-					while(XJ_states[0] == 0 && XJ_states[1] == 0 && XJ_states[2] == 0 && XJ_states[3] == 0 && XJ_states[4] == 0)
-					{
-						HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
-						osDelay(100);
-						tracking_update();
-					}
-				}
-				else
-				{
-					HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_RESET);//L
-					HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_RESET);//R
-					
-					straightLine_obstacleAvoidence();
-					
-//					LQ_StepAhead(100);
-//					LH_StepAhead(100);
-//					RQ_StepAhead(0);
-//					RH_StepAhead(0);
-//					osDelay(5000);
+			chassis_moveon_pc();
+		}
+		
+//		if(chassis.chassis_track_relax != 1)
+//		{
+//			if(start == 0)
+//				start = HAL_GetTick();
+//			
+//			now = HAL_GetTick();
+//			duration = now - start;
+//			
+//			if(detected_obstacle == 0)
+//			{
+//				chassis_moveon();
+//				HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_SET);
+//				HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);
+//				HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_SET);
+//			}
+//			else if(detected_obstacle == 1)
+//			{
+//				if(duration < 4300)//2800
+//				{
+//					HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);//L
+//					HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_RESET);//R
+//			
+//					chassis_rightTurn_withTime();
+//					chassis_turnRight(3);
+//					osDelay(200);
 //					
 //					tracking_update();
 //	
@@ -178,13 +109,99 @@ void chassis_task(void const * argument)
 //						osDelay(100);
 //						tracking_update();
 //					}
-				}
-				finished_turn = 0;
-				detected_obstacle = 0;
-				flag = 0;
-				//linearLine_obstacleAvoidence();
-			}
-		}
+//				}
+//				else if(duration < 9100)//9000
+//				{
+//					HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_RESET);//L
+//					HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_SET);//R
+//					
+//					chassis_leftTurn_withTime();
+//				}
+//				else if(duration < 11700)//12000
+//				{
+//					HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);//L
+//					HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_RESET);//R
+//					
+//					//chassis_rightTurn_withTime();
+//					
+//					while(finished_turn == 0)
+//					{
+//						chassis_turnRight(3);
+//						osDelay(1);
+//					}
+//					osDelay(400);
+//					
+//					RQ_StepAhead(100);
+//					RH_StepAhead(100);
+//					LQ_StepAhead(15);
+//					LH_StepAhead(15);
+//					osDelay(3400);
+//					
+//					tracking_update();
+
+//					while(XJ_states[0] == 0 && XJ_states[1] == 0 && XJ_states[2] == 0 && XJ_states[3] == 0 && XJ_states[4] == 0)
+//					{
+//						HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
+//						osDelay(100);
+//						tracking_update();
+//					}
+//					
+//				}
+//				else if(duration < 18800)//17000
+//				{
+//					HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_RESET);//L
+//					HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_SET);//R
+//					
+//					chassis_leftTurn_withTime();
+//					chassis_turnLeft(3);
+//					osDelay(200);
+//				}
+//				else if(duration < 25865)//22000
+//				{
+//					HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);//L
+//					HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_RESET);//R
+//					
+//					chassis_rightTurn_withTime();
+//					chassis_turnRight(3);
+//					osDelay(800);
+//					
+//					tracking_update();
+//	
+//					while(XJ_states[0] == 0 && XJ_states[1] == 0 && XJ_states[2] == 0 && XJ_states[3] == 0 && XJ_states[4] == 0)
+//					{
+//						HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
+//						osDelay(100);
+//						tracking_update();
+//					}
+//				}
+//				else
+//				{
+//					HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_RESET);//L
+//					HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_RESET);//R
+//					
+//					straightLine_obstacleAvoidence();
+//					
+////					LQ_StepAhead(100);
+////					LH_StepAhead(100);
+////					RQ_StepAhead(0);
+////					RH_StepAhead(0);
+////					osDelay(5000);
+////					
+////					tracking_update();
+////	
+////					while(XJ_states[0] == 0 && XJ_states[1] == 0 && XJ_states[2] == 0 && XJ_states[3] == 0 && XJ_states[4] == 0)
+////					{
+////						HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
+////						osDelay(100);
+////						tracking_update();
+////					}
+//				}
+//				finished_turn = 0;
+//				detected_obstacle = 0;
+//				flag = 0;
+//				//linearLine_obstacleAvoidence();
+//			}
+//		}
 //		else if(chassis.chassis_pc_relax != 1)
 //		{
 //			chassis_moveon_pc();
@@ -202,7 +219,6 @@ void straightLine_obstacleAvoidence()
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_SET);
 	
-	HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
 	chassis_turnRight(3);
 	osDelay(900);
 	chassis_goStraight();
@@ -214,16 +230,17 @@ void straightLine_obstacleAvoidence()
 	chassis_turnLeft(3);
 	osDelay(1000);
 	chassis_goStraight();
-	osDelay(1500);
+	osDelay(1200);
 	tracking_update();
 	while(XJ_states[0] == 0 && XJ_states[1] == 0 && XJ_states[2] == 0 && XJ_states[3] == 0 && XJ_states[4] == 0)
 	{
+		HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
 		chassis_goStraight();
 		osDelay(100);
 		tracking_update();
 	}
 	chassis_turnRight(3);
-	osDelay(1000);
+	osDelay(500);
 	flag++;
 	detected_obstacle = 0;
 	finished_turn = 0;
@@ -338,24 +355,24 @@ void chassis_moveon_pc()
 	
 	if(chassis.wheel_pwm[RF] >= 0)
 	{
-		__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_4, 0);
-		__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_3, chassis.wheel_pwm[RF]);
+		__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_4, -chassis.wheel_pwm[RF]);
+		__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_3, 0);
 	}
 	if(chassis.wheel_pwm[RF] < 0)
 	{
-		__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_4, -chassis.wheel_pwm[RF]);
-		__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_3, 0);
+		__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_4, 0);
+		__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_3, chassis.wheel_pwm[RF]);
 	}
 	
 	if(chassis.wheel_pwm[RB] >= 0)
 	{
-		__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_2, chassis.wheel_pwm[RB]);
-		__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_1, 0);
+		__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_2, 0);
+		__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_1, -chassis.wheel_pwm[RB]);
 	}
 	if(chassis.wheel_pwm[RB] < 0)
 	{
-		__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_2, 0);
-		__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_1, -chassis.wheel_pwm[RB]);
+		__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_2, chassis.wheel_pwm[RB]);
+		__HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_1, 0);
 	}
 }
 
@@ -484,15 +501,11 @@ void chassis_leftTurn_withTime()
 
 void chassis_rightTurn_withTime()
 {
-//	uint32_t start_turning;
-//	start_turning = HAL_GetTick();
 	while(finished_turn == 0)
 	{
 		chassis_turnRight(3);
 		osDelay(1);
 	}
-//	uint32_t finished_turning;
-//	finished_turning = HAL_GetTick();
 	osDelay(700);
 	
 	RQ_StepAhead(100);

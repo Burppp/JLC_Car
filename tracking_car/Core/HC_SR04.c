@@ -56,7 +56,7 @@ void SR04_task(void const * argument)
 				{
 					is_turning++;
 				}
-				if(is_turning >= 5)
+				if(is_turning >= 8)
 				{
 					finished_turn = 1;
 					is_turning = 0;
